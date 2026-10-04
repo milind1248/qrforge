@@ -1,7 +1,7 @@
 from core import license as _license
 
 _license.require()
-"""QR generator (landing page). Works anonymously for static codes; saving/dynamic needs an account."""
+# QR generator (landing page). Works anonymously for static codes; saving/dynamic needs an account.
 import datetime as dt
 
 import streamlit as st
