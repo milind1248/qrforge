@@ -1,3 +1,6 @@
+from core import license as _license
+
+_license.require()
 import streamlit as st
 
 from core import auth, db

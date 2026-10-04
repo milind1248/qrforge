@@ -3,7 +3,9 @@ import streamlit as st
 
 st.set_page_config(page_title="QRForge - QR Code Generator", page_icon=":material/qr_code_2:", layout="wide")
 
-from core import auth, db, landing, ui  # noqa: E402
+from core import auth, db, landing, license, ui  # noqa: E402
+
+license.require()  # no valid key = nothing runs, including scan links
 from core.config import ROOT  # noqa: E402
 
 

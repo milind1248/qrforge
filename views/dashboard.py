@@ -1,3 +1,6 @@
+from core import license as _license
+
+_license.require()
 import json
 from datetime import date, datetime, timedelta
 

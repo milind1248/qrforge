@@ -1,3 +1,6 @@
+from core import license as _license
+
+_license.require()
 import pandas as pd
 import streamlit as st
 

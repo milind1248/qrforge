@@ -15,6 +15,7 @@ class _DT(datetime):
 
 datetime = _DT  # noqa: A001
 
+from core import license as _license
 from core.config import DATABASE_URL, DB_PATH
 
 USE_PG = bool(DATABASE_URL)
@@ -82,6 +83,8 @@ def _get_pool():
 
 @contextmanager
 def conn():
+    if not _license.is_valid():
+        raise RuntimeError("License key missing or invalid")
     if USE_PG:
         with _get_pool().connection() as c:
             yield c

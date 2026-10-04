@@ -1,3 +1,6 @@
+from core import license as _license
+
+_license.require()
 import io
 import re
 import zipfile

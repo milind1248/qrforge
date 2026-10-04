@@ -30,5 +30,6 @@ SMTP_PASSWORD = _get("SMTP_PASSWORD", "")
 OWNER_EMAIL = _get("OWNER_EMAIL", "")                       # gets admin alerts (new signups / logins)
 NOTIFY_USER_LOGIN = _get("NOTIFY_USER_LOGIN", "true").lower() == "true"    # login alert to the user
 NOTIFY_OWNER_LOGIN = _get("NOTIFY_OWNER_LOGIN", "true").lower() == "true"  # copy to OWNER_EMAIL
+LICENSE_KEY = _get("LICENSE_KEY", "")                    # required: see core/license.py
 PAYMENT_PROVIDER = _get("PAYMENT_PROVIDER", "mock")   # mock | razorpay | stripe (later)
 CURRENCY = "₹"

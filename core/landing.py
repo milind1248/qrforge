@@ -3,7 +3,7 @@ import hashlib
 
 import streamlit as st
 
-from core import auth, db, router, safety, ui
+from core import auth, db, license, router, safety, ui
 from core.plans import get_plan
 
 REPORT_REASONS = ["Looks like a scam / phishing", "Sticker placed over another QR code", "Inappropriate content",
@@ -35,6 +35,7 @@ def _card(html: str):
 
 
 def handle(code: str):
+    license.require()
     qr = db.get_qr_by_code(code)
     if not qr or code == "preview":
         _card("<h3>QR code not found</h3><p>This code does not exist or was deleted.</p>"
