@@ -39,7 +39,11 @@ The SQLite database is created automatically at `data/qrforge.db`. **The first a
 2. In app Secrets set `BASE_URL = "https://<your-app>.streamlit.app"` so dynamic QR codes point at the live app.
 3. **Important:** Community Cloud storage is ephemeral. SQLite data resets on restart, so move to Supabase before real customers (below).
 
-## Migration path to Supabase
+## Supabase (Postgres) backend: implemented
+Set `DATABASE_URL` (env var or Streamlit secret) to your Supabase **pooler** connection string and the app switches from SQLite to Postgres automatically: tables are created on first start (see `supabase/schema.sql`), and row-level security is enabled on every table so the public anon API cannot read them. Verified locally against PostgreSQL 17.
+Supabase Auth is not used yet; accounts are still in the `users` table with bcrypt hashes.
+
+## Original migration notes
 - `core/db.py` is the only module that touches storage. Re-implement the same functions against Supabase Postgres (tables mirror `SCHEMA`).
 - `core/auth.py`: replace with Supabase Auth (`sign_up`, `sign_in_with_password`) and store the user id in `st.session_state.uid`.
 - Add cookie-based session persistence (e.g. `extra-streamlit-components`) so refresh keeps users signed in. Currently a browser refresh logs out.

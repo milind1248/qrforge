@@ -15,7 +15,9 @@ class _DT(datetime):
 
 datetime = _DT  # noqa: A001
 
-from core.config import DB_PATH
+from core.config import DATABASE_URL, DB_PATH
+
+USE_PG = bool(DATABASE_URL)
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS users(
@@ -47,8 +49,37 @@ MIGRATIONS = {  # table -> {column: type}; keeps older local databases working
 }
 
 
+PG_TS = "to_char(now() AT TIME ZONE 'utc','YYYY-MM-DD HH24:MI:SS')"
+
+
+def _pg_schema() -> str:
+    """Same tables as SCHEMA, in Postgres dialect. Timestamps stay TEXT so the app code is backend-neutral."""
+    t = (SCHEMA.replace("INTEGER PRIMARY KEY AUTOINCREMENT", "BIGSERIAL PRIMARY KEY")
+         .replace("DEFAULT CURRENT_TIMESTAMP", f"DEFAULT ({PG_TS})"))
+    tables = ["users", "qrcodes", "scans", "payments", "reports"]
+    rls = "".join(f"ALTER TABLE {n} ENABLE ROW LEVEL SECURITY;" for n in tables)  # block the public anon API
+    return t + rls
+
+
+_pool = None
+
+
+def _get_pool():
+    global _pool
+    if _pool is None:
+        from psycopg.rows import dict_row
+        from psycopg_pool import ConnectionPool
+        _pool = ConnectionPool(DATABASE_URL, min_size=1, max_size=4, open=True,
+                               kwargs={"row_factory": dict_row, "prepare_threshold": None, "autocommit": False})
+    return _pool
+
+
 @contextmanager
 def conn():
+    if USE_PG:
+        with _get_pool().connection() as c:
+            yield c
+        return
     DB_PATH.parent.mkdir(parents=True, exist_ok=True)
     c = sqlite3.connect(DB_PATH)
     c.row_factory = sqlite3.Row
@@ -60,6 +91,14 @@ def conn():
 
 
 def init_db():
+    if USE_PG:
+        with conn() as c:
+            for stmt in [x for x in _pg_schema().split(";") if x.strip()]:
+                c.execute(stmt)
+            for table, cols in MIGRATIONS.items():
+                for col, typ in cols.items():
+                    c.execute(f"ALTER TABLE {table} ADD COLUMN IF NOT EXISTS {col} {typ}")
+        return
     with conn() as c:
         c.executescript(SCHEMA)
         for table, cols in MIGRATIONS.items():
@@ -69,9 +108,14 @@ def init_db():
                     c.execute(f"ALTER TABLE {table} ADD COLUMN {col} {typ}")
 
 
+def _sql(sql: str) -> str:
+    return sql.replace("?", "%s") if USE_PG else sql
+
+
 def _q(sql, args=()):
     with conn() as c:
-        return [dict(r) for r in c.execute(sql, args).fetchall()]
+        cur = c.execute(_sql(sql), args)
+        return [dict(r) for r in cur.fetchall()]
 
 
 def _one(sql, args=()):
@@ -80,7 +124,12 @@ def _one(sql, args=()):
 
 
 def _x(sql, args=()):
+    """Execute a write; returns the new row id for INSERTs."""
     with conn() as c:
+        if USE_PG:
+            is_insert = sql.lstrip().upper().startswith("INSERT")
+            cur = c.execute(_sql(sql) + (" RETURNING id" if is_insert else ""), args)
+            return cur.fetchone()["id"] if is_insert else None
         return c.execute(sql, args).lastrowid
 
 
