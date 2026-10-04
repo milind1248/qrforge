@@ -6,7 +6,14 @@ st.set_page_config(page_title="QRForge - QR Code Generator", page_icon=":materia
 from core import auth, db, landing, ui  # noqa: E402
 from core.config import ROOT  # noqa: E402
 
-db.init_db()
+
+
+@st.cache_resource
+def _init_db_once():
+    db.init_db()   # once per server process, not on every rerun
+
+
+_init_db_once()
 ui.inject_css()
 
 

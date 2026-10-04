@@ -96,9 +96,27 @@ def conn():
         c.close()
 
 
+_PG_TABLES = {"users", "qrcodes", "scans", "payments", "reports"}
+
+
+def _pg_ready(c) -> bool:
+    """Read-only check (takes no table locks): are all tables and migrated columns already present?"""
+    rows = c.execute("SELECT table_name, column_name FROM information_schema.columns WHERE table_schema=%s",
+                     (PG_SCHEMA,)).fetchall()
+    have = {(r["table_name"], r["column_name"]) for r in rows}
+    if not _PG_TABLES <= {t for t, _ in have}:
+        return False
+    return all((t, col) in have for t, cols in MIGRATIONS.items() for col in cols)
+
+
 def init_db():
     if USE_PG:
         with conn() as c:
+            if _pg_ready(c):          # normal case: nothing to do, no DDL, no locks, no deadlocks
+                return
+            c.execute("SELECT pg_advisory_xact_lock(727274)")   # one process at a time may run DDL
+            if _pg_ready(c):          # someone else finished while we waited
+                return
             c.execute(f"CREATE SCHEMA IF NOT EXISTS {PG_SCHEMA}")
             for stmt in [x for x in _pg_schema().split(";") if x.strip()]:
                 c.execute(stmt)
