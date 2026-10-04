@@ -2,6 +2,9 @@
 
 Original implementation inspired by the feature set of dynamic-QR products. No third-party code or assets.
 
+## Licensing
+The app requires `LICENSE_KEY` (Streamlit secret or env var; `[deploy] license_key` also accepted). Without a valid key every page, scan link and the DB layer refuse to run. Only a salted hash of the key is in the code. The repository is private.
+
 ## Run locally
 ```bash
 pip install -r requirements.txt
