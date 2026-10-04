@@ -1,0 +1,5 @@
+data/*.db
+.streamlit/secrets.toml
+__pycache__/
+.claude/
+*.pyc
