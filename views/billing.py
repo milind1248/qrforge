@@ -14,6 +14,10 @@ st.title("Billing & plan")
 if msg := st.session_state.pop("flash", None):
     st.success(msg)
 
+_pend = db.get_pending_claim(user["id"])
+if _pend:
+    st.warning(f"Payment claim for **{_pend['plan'].title()}** ({_pend['period']}) submitted {_pend['created_at'][:10]} is awaiting review.", icon=":material/hourglass_top:")
+
 c1, c2, c3 = st.columns(3)
 c1.metric("Current plan", plan.name)
 c2.metric("Billing", (user["period"] or "-").title())

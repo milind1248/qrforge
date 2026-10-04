@@ -17,13 +17,16 @@ def enabled() -> bool:
     return bool(SMTP_SENDER and SMTP_PASSWORD)
 
 
-def _send(to: str, subject: str, text: str, body_html: str):
+def _send(to: str, subject: str, text: str, body_html: str, attachments=()):
     msg = EmailMessage()
     msg["From"] = f"{APP_NAME} <{SMTP_SENDER}>"
     msg["To"] = to
     msg["Subject"] = subject
     msg.set_content(text)
     msg.add_alternative(body_html, subtype="html")
+    for name, data, mime in attachments:
+        maintype, _, subtype = mime.partition("/")
+        msg.add_attachment(data, maintype=maintype, subtype=subtype, filename=name)
     try:
         with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=20) as s:
             s.starttls()
@@ -33,9 +36,9 @@ def _send(to: str, subject: str, text: str, body_html: str):
         log.warning("email to %s failed: %s", to, e)
 
 
-def send_async(to: str, subject: str, text: str, body_html: str):
+def send_async(to: str, subject: str, text: str, body_html: str, attachments=()):
     if enabled() and to:
-        threading.Thread(target=_send, args=(to, subject, text, body_html), daemon=True).start()
+        threading.Thread(target=_send, args=(to, subject, text, body_html, attachments), daemon=True).start()
 
 
 def _wrap(title: str, rows: list[tuple[str, str]], footer: str) -> str:
@@ -74,3 +77,35 @@ def on_signup(user: dict, when: str):
     if OWNER_EMAIL and OWNER_EMAIL.lower() != user["email"].lower():
         send_async(OWNER_EMAIL, f"[{APP_NAME}] New signup: {user['email']}",
                    "New signup: " + "; ".join(f"{k}: {v}" for k, v in rows), _wrap("New signup", rows, "Admin notification."))
+
+
+def on_claim_submitted(user: dict, plan: str, period: str, paid: int, expected: int, ref: str, pay_date: str,
+                       notes: str, shot: bytes, shot_mime: str):
+    rows = [("User", f"{user['name']} <{user['email']}>"), ("Plan", f"{plan.title()} ({period})"),
+            ("Amount paid", f"Rs {paid:,}"), ("Expected", f"Rs {expected:,}" + ("" if paid == expected else "  (MISMATCH)")),
+            ("Payment date", pay_date), ("UPI reference", ref or "-"), ("Notes", notes or "-")]
+    if OWNER_EMAIL:
+        send_async(OWNER_EMAIL, f"[{APP_NAME}] Payment claim: {user['email']} - {plan.title()} Rs {paid:,}",
+                   "Payment claim to review\n" + "\n".join(f"{k}: {v}" for k, v in rows),
+                   _wrap("Payment claim to review", rows, f"Review it under Admin → Payment claims at {BASE_URL}. Screenshot attached."),
+                   attachments=[("payment-screenshot.jpg", shot, shot_mime)])
+    send_async(user["email"], f"We received your {APP_NAME} payment claim",
+               f"Hi {user['name']}, we received your payment claim for the {plan.title()} plan (Rs {paid:,}). "
+               "We will verify it and activate your plan shortly, usually within a day.",
+               _wrap("Payment claim received", [("Plan", f"{plan.title()} ({period})"), ("Amount", f"Rs {paid:,}"),
+                                                ("Status", "Under review")],
+                     "We will verify your payment and activate your plan, usually within a day. You will get another email once it is approved."))
+
+
+def on_claim_decision(user_row: dict, plan: str, period: str, approved: bool, reason: str = ""):
+    """user_row needs email + name."""
+    if approved:
+        send_async(user_row["email"], f"Your {APP_NAME} {plan.title()} plan is active",
+                   f"Hi {user_row['name']}, your payment is verified and the {plan.title()} plan ({period}) is now active. {BASE_URL}",
+                   _wrap("Your plan is active", [("Plan", f"{plan.title()} ({period})"), ("Status", "Active")],
+                         f"Thank you! <a href='{BASE_URL}'>Open QRForge</a> to use your new features."))
+    else:
+        send_async(user_row["email"], f"Your {APP_NAME} payment claim could not be verified",
+                   f"Hi {user_row['name']}, we could not verify your payment claim for the {plan.title()} plan. {reason}",
+                   _wrap("Payment claim not approved", [("Plan", f"{plan.title()} ({period})"), ("Reason", reason or "Not specified")],
+                         "If you believe this is a mistake, submit a new claim with a clear screenshot of the successful payment, or reply to this email."))

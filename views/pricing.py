@@ -3,7 +3,10 @@ from core import license as _license
 _license.require()
 import streamlit as st
 
-from core import auth, payments
+from datetime import date
+
+from core import auth, db, notify, payments, upi
+from core.config import PAYMENT_PROVIDER
 from core.plans import COUPONS, ORDER, PLANS, get_plan, price_for
 from core.ui import footer, hero
 
@@ -19,25 +22,6 @@ if msg := st.session_state.pop("flash", None):
 period = st.segmented_control("Billing", ["monthly", "yearly"], default="yearly",
                               format_func=lambda x: "Monthly" if x == "monthly" else "Yearly · save ~20%",
                               key="bill_period") or "yearly"
-
-
-@st.dialog("Checkout")
-def checkout(plan_key: str):
-    p = PLANS[plan_key]
-    st.markdown(f"**{p.name}** plan · billed **{period}**")
-    coupon = st.text_input("Coupon code (optional)", placeholder="LAUNCH20")
-    pct = COUPONS.get(coupon.strip().upper(), 0)
-    if coupon and not pct:
-        st.warning("Coupon not recognised.")
-    amt = price_for(p, period, coupon)
-    if pct:
-        st.success(f"{pct}% discount applied")
-    st.metric("Total today", f"₹{amt:,}")
-    st.caption("Test mode: no real payment is taken. A live gateway (Razorpay / Stripe) plugs in here.")
-    if st.button(f"Pay ₹{amt:,}", type="primary", width="stretch"):
-        payments.charge(user["id"], plan_key, period, coupon if pct else None)
-        st.session_state["flash"] = f"You are now on the {p.name} plan. Thank you!"
-        st.rerun()
 
 
 cols = st.columns(4, gap="medium")
@@ -65,7 +49,94 @@ for col, key in zip(cols, ORDER):
         elif cur == key:
             st.button("Current plan", disabled=True, key=f"b_{key}", width="stretch")
         elif st.button(f"Choose {p.name}", key=f"b_{key}", type="primary" if hot else "secondary", width="stretch"):
-            checkout(key)
+            st.session_state["sub_plan"] = key
+            st.session_state.pop("qr_revealed", None)
+
+def subscribe_section():
+    """Manual UPI flow: blurred QR -> reveal -> pay -> upload screenshot -> admin approves."""
+    if not user:
+        return
+    pending = db.get_pending_claim(user["id"])
+    plan_key = st.session_state.get("sub_plan")
+    if not pending and not plan_key:
+        return
+    st.divider()
+    if pending:
+        st.warning(f"Your **{pending['plan'].title()}** ({pending['period']}) payment claim submitted on "
+                   f"{pending['created_at'][:10]} is awaiting review. Your plan updates automatically once it is approved. "
+                   "You will get an email.", icon=":material/hourglass_top:")
+        return
+    p = PLANS[plan_key]
+    st.subheader(f"Subscribe to {p.name}")
+    if PAYMENT_PROVIDER == "mock":
+        amt = price_for(p, period)
+        st.caption("Test mode: no real payment is taken.")
+        if st.button(f"Activate {p.name} (test) ₹{amt:,}", type="primary"):
+            payments.charge(user["id"], plan_key, period)
+            st.session_state.pop("sub_plan", None)
+            st.session_state["flash"] = f"You are now on the {p.name} plan."
+            st.rerun()
+        return
+
+    coupon = st.text_input("Coupon code (optional)", placeholder="LAUNCH20", key="sub_coupon")
+    pct = COUPONS.get(coupon.strip().upper(), 0)
+    if coupon and not pct:
+        st.warning("Coupon not recognised.")
+    expected = price_for(p, period, coupon if pct else None)
+    st.markdown(f"**{p.name}** · billed **{period}** · amount to pay: **₹{expected:,}**" + (f"  ({pct}% off)" if pct else ""))
+
+    qc1, qc2 = st.columns([1, 2], gap="large")
+    qr = upi.get_payment_qr()
+    with qc1:
+        if qr:
+            if st.session_state.get("qr_revealed"):
+                st.image(qr, caption=f"Scan to pay ₹{expected:,} via any UPI app", width=240)
+            else:
+                st.image(upi.blurred(qr), width=240)
+                st.caption("QR code hidden. Tap to reveal.")
+                if st.button("Show QR Code", icon=":material/visibility:", type="primary", width="stretch", key="qr_btn"):
+                    st.session_state["qr_revealed"] = True
+                    st.rerun()
+        else:
+            st.info("The payment QR code is not configured yet. Please contact the site admin.")
+    with qc2:
+        st.markdown("**How to subscribe**\n\n1. Scan the QR code and pay via any UPI app.\n"
+                    "2. Take a screenshot of the successful payment.\n3. Fill in the form below and upload the screenshot.\n"
+                    "4. We verify it and activate your plan, usually within a day.")
+    st.markdown("<div style='background:#FFF7ED;border-left:4px solid #F59E0B;padding:8px 12px;border-radius:8px;"
+                "font-size:13px;color:#92400E;margin:8px 0'>⚠️ All payments are final and non-refundable. By submitting a payment "
+                "claim you acknowledge that no refunds, full or partial, are issued for cancellation, downgrade or non-usage.</div>",
+                unsafe_allow_html=True)
+    with st.form("claim_form"):
+        c1, c2 = st.columns(2)
+        amount = c1.number_input("Amount paid (₹)", min_value=0.0, value=float(expected), step=1.0)
+        pay_date = c2.date_input("Payment date", value=date.today(), max_value=date.today())
+        ref = st.text_input("UPI transaction ID (optional)")
+        shot = st.file_uploader("Payment screenshot", type=["png", "jpg", "jpeg"])
+        notes = st.text_area("Notes (optional)", height=68)
+        go = st.form_submit_button("Submit payment claim", type="primary", width="stretch")
+    if go:
+        if shot is None:
+            st.error("Please upload a screenshot of the successful payment.")
+        elif amount <= 0:
+            st.error("Enter the amount you paid.")
+        else:
+            try:
+                b64, mime = upi.prepare_screenshot(shot.getvalue())
+            except Exception:  # noqa: BLE001
+                st.error("That file is not a valid image. Upload a PNG or JPG screenshot.")
+                st.stop()
+            db.submit_claim(user["id"], plan_key, period, amount, coupon if pct else None, pay_date, ref, notes, b64, mime)
+            import base64
+            notify.on_claim_submitted(user, plan_key, period, int(round(amount)), expected, ref, str(pay_date), notes,
+                                      base64.b64decode(b64), mime)
+            st.session_state.pop("sub_plan", None)
+            st.session_state.pop("qr_revealed", None)
+            st.session_state["flash"] = "Submitted. We will review your payment and activate your plan shortly."
+            st.rerun()
+
+
+subscribe_section()
 
 st.write("")
 st.subheader("Our promises")

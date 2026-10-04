@@ -38,6 +38,8 @@ CREATE TABLE IF NOT EXISTS payments(
   id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, plan TEXT, period TEXT,
   amount INTEGER, coupon TEXT, provider TEXT, status TEXT, txn_ref TEXT,
   created_at TEXT DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE IF NOT EXISTS settings(
+  key TEXT PRIMARY KEY, value TEXT, mime TEXT, updated_at TEXT);
 CREATE TABLE IF NOT EXISTS reports(
   id INTEGER PRIMARY KEY AUTOINCREMENT, qr_id INTEGER NOT NULL, reason TEXT, note TEXT,
   status TEXT DEFAULT 'open', created_at TEXT DEFAULT CURRENT_TIMESTAMP);
@@ -47,6 +49,8 @@ MIGRATIONS = {  # table -> {column: type}; keeps older local databases working
     "qrcodes": {"rules": "TEXT", "campaign": "TEXT", "trust_preview": "INTEGER DEFAULT 0",
                 "health": "TEXT", "health_at": "TEXT"},
     "users": {"last_alert": "TEXT"},
+    "payments": {"screenshot": "TEXT", "screenshot_mime": "TEXT", "pay_date": "TEXT", "notes": "TEXT",
+                 "reviewed_by": "TEXT", "reviewed_at": "TEXT"},
     "scans": {"lang": "TEXT", "visitor": "TEXT", "outcome": "TEXT", "variant": "TEXT"},
 }
 
@@ -59,7 +63,7 @@ def _pg_schema() -> str:
     """Same tables as SCHEMA, in Postgres dialect. Timestamps stay TEXT so the app code is backend-neutral."""
     t = (SCHEMA.replace("INTEGER PRIMARY KEY AUTOINCREMENT", "BIGSERIAL PRIMARY KEY")
          .replace("DEFAULT CURRENT_TIMESTAMP", f"DEFAULT ({PG_TS})"))
-    tables = ["users", "qrcodes", "scans", "payments", "reports"]
+    tables = ["users", "qrcodes", "scans", "payments", "reports", "settings"]
     rls = "".join(f"ALTER TABLE {n} ENABLE ROW LEVEL SECURITY;" for n in tables)  # block the public anon API
     return t + rls
 
@@ -99,7 +103,7 @@ def conn():
         c.close()
 
 
-_PG_TABLES = {"users", "qrcodes", "scans", "payments", "reports"}
+_PG_TABLES = {"users", "qrcodes", "scans", "payments", "reports", "settings"}
 
 
 def _pg_ready(c) -> bool:
@@ -295,12 +299,69 @@ def add_payment(uid, plan, period, amount, coupon, provider, status, txn_ref):
               " VALUES(?,?,?,?,?,?,?,?)", (uid, plan, period, amount, coupon, provider, status, txn_ref))
 
 
+_PAY_COLS = "id,user_id,plan,period,amount,coupon,provider,status,txn_ref,pay_date,notes,reviewed_by,reviewed_at,created_at"
+
+
 def payments_for_user(uid):
-    return _q("SELECT * FROM payments WHERE user_id=? ORDER BY id DESC", (uid,))
+    return _q(f"SELECT {_PAY_COLS} FROM payments WHERE user_id=? ORDER BY id DESC", (uid,))
 
 
 def all_payments():
-    return _q("SELECT p.*, u.email FROM payments p JOIN users u ON u.id=p.user_id ORDER BY p.id DESC")
+    cols = ",".join("p." + c for c in _PAY_COLS.split(","))
+    return _q(f"SELECT {cols}, u.email FROM payments p JOIN users u ON u.id=p.user_id ORDER BY p.id DESC")
+
+
+# ---- settings (e.g. the UPI payment QR image, stored base64) -------------------
+def get_setting(key):
+    return _one("SELECT value, mime FROM settings WHERE key=?", (key,))
+
+
+def set_setting(key, value, mime=None):
+    sql = ("INSERT INTO settings(key,value,mime,updated_at) VALUES(?,?,?,?) "
+           "ON CONFLICT(key) DO UPDATE SET value=excluded.value, mime=excluded.mime, updated_at=excluded.updated_at")
+    with conn() as c:
+        c.execute(_sql(sql), (key, value, mime, datetime.utcnow().isoformat(sep=" ", timespec="seconds")))
+
+
+# ---- manual UPI payment claims (user pays by UPI, uploads screenshot, admin approves) ----
+def submit_claim(uid, plan, period, amount, coupon, pay_date, ref, notes, shot_b64, shot_mime):
+    return _x("INSERT INTO payments(user_id,plan,period,amount,coupon,provider,status,txn_ref,pay_date,notes,screenshot,screenshot_mime)"
+              " VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
+              (uid, plan, period, int(round(amount)), coupon, "upi_manual", "pending", ref or None, str(pay_date),
+               notes or None, shot_b64, shot_mime))
+
+
+def get_pending_claim(uid):
+    return _one("SELECT id,plan,period,amount,created_at FROM payments WHERE user_id=? AND status='pending' "
+                "ORDER BY id DESC LIMIT 1", (uid,))
+
+
+def list_pending_claims():
+    return _q("SELECT p.id,p.user_id,u.email,u.name,p.plan,p.period,p.amount,p.coupon,p.pay_date,p.txn_ref,p.notes,p.created_at "
+              "FROM payments p JOIN users u ON u.id=p.user_id WHERE p.status='pending' ORDER BY p.id ASC")
+
+
+def get_claim_screenshot(pid):
+    return _one("SELECT screenshot, screenshot_mime FROM payments WHERE id=?", (pid,))
+
+
+def approve_claim(pid, by):
+    row = _one("SELECT user_id,plan,period FROM payments WHERE id=? AND status='pending'", (pid,))
+    if not row:
+        return None
+    set_plan(row["user_id"], row["plan"], row["period"])
+    _x("UPDATE payments SET status='paid', reviewed_by=?, reviewed_at=? WHERE id=?",
+       (by, datetime.utcnow().isoformat(sep=" ", timespec="seconds"), pid))
+    return row
+
+
+def reject_claim(pid, by, reason=""):
+    row = _one("SELECT user_id,plan,period FROM payments WHERE id=? AND status='pending'", (pid,))
+    if not row:
+        return None
+    _x("UPDATE payments SET status='rejected', reviewed_by=?, reviewed_at=?, notes=? WHERE id=?",
+       (by, datetime.utcnow().isoformat(sep=" ", timespec="seconds"), reason or None, pid))
+    return row
 
 
 def platform_stats():

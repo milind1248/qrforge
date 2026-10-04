@@ -45,5 +45,5 @@ OWNER_EMAIL = _get("OWNER_EMAIL", "")                       # gets admin alerts 
 NOTIFY_USER_LOGIN = _get("NOTIFY_USER_LOGIN", "true").lower() == "true"    # login alert to the user
 NOTIFY_OWNER_LOGIN = _get("NOTIFY_OWNER_LOGIN", "true").lower() == "true"  # copy to OWNER_EMAIL
 LICENSE_KEY = _get("LICENSE_KEY", "")                    # required: see core/license.py
-PAYMENT_PROVIDER = _get("PAYMENT_PROVIDER", "mock")   # mock | razorpay | stripe (later)
+PAYMENT_PROVIDER = _get("PAYMENT_PROVIDER", "upi_manual")   # upi_manual | mock | razorpay | stripe (later)
 CURRENCY = "₹"
