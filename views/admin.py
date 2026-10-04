@@ -44,7 +44,10 @@ with t1:
         st.success("Plan updated.")
         st.rerun()
 with t2:
-    st.dataframe(pd.DataFrame(pays), width="stretch", hide_index=True) if pays else st.caption("No payments yet.")
+    if pays:
+        st.dataframe(pd.DataFrame(pays), width="stretch", hide_index=True)
+    else:
+        st.caption("No payments yet.")
 with t3:
     mix = pd.Series([u["plan"] for u in users]).value_counts().reindex(ORDER, fill_value=0)
     st.bar_chart(mix, color="#4F46E5")
