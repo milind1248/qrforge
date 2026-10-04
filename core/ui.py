@@ -8,6 +8,11 @@ CSS = """
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 html, body, .stApp { font-family: 'Inter', sans-serif; }
 .stApp { background: radial-gradient(1200px 500px at 85% -10%, #E0E7FF 0%, rgba(248,250,252,0) 60%), #F8FAFC; }
+/* pills / segmented controls: newer Streamlit renders them as ONE scrolling row with a fade; make them wrap instead */
+[data-testid="stButtonGroup"] div { flex-wrap: wrap !important; overflow: visible !important;
+  mask-image: none !important; -webkit-mask-image: none !important; row-gap: .45rem; }
+/* generator row: stack the preview under the form when the page area is narrow (sidebar open / small windows) */
+[data-testid="stColumn"]:has([data-testid="stButtonGroup"]) { min-width: min(100%, 300px); }
 .block-container { padding-top: 2rem; max-width: 1200px; }
 h1, h2, h3 { letter-spacing: -0.02em; }
 .hero { text-align:center; padding: 1.5rem 0 1rem; }
