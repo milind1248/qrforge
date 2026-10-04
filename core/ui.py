@@ -29,9 +29,9 @@ h1, h2, h3 { letter-spacing: -0.02em; }
   color:#fff; font-size:.72rem; font-weight:700; padding:.25rem .7rem; border-radius:999px; }
 .plan h3 { margin:0; font-size:1.25rem; }
 .plan .tag { color:#64748B; font-size:.88rem; margin-bottom:.8rem; }
-.plan .price { font-size:2.3rem; font-weight:800; color:#0F172A; }
+.plan .price { font-size:clamp(1.55rem,2.1vw,2.3rem); font-weight:800; color:#0F172A; white-space:nowrap; }
 .plan .price small { font-size:.9rem; font-weight:500; color:#64748B; }
-.plan .strike { color:#94A3B8; text-decoration:line-through; font-size:.9rem; margin-left:.4rem; }
+.plan .strike { color:#94A3B8; text-decoration:line-through; font-size:.85rem; margin-left:.3rem; white-space:nowrap; }
 .plan ul { padding-left:0; list-style:none; margin:1rem 0 0; }
 .plan li { padding:.28rem 0 .28rem 1.5rem; position:relative; font-size:.92rem; color:#334155; }
 .plan li:before { content:"✓"; position:absolute; left:0; color:#10B981; font-weight:800; }
