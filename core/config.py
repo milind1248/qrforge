@@ -10,12 +10,26 @@ APP_NAME = "QRForge"
 
 
 def _get(key: str, default: str) -> str:
+    """Environment variable first, then Streamlit secrets. Accepts the key at top level (KEY = ...) or inside any
+    [section] (e.g. [deploy] license_key = ...), case-insensitively, so a mis-nested secrets file still works."""
     if key in os.environ:
         return os.environ[key]
     try:
-        return str(st.secrets[key])
+        sec = st.secrets
+        if key in sec:
+            return str(sec[key])
+        want = key.lower()
+        for k in list(sec.keys()):
+            v = sec[k]
+            if str(k).lower() == want and not hasattr(v, "keys"):
+                return str(v)
+            if hasattr(v, "keys"):
+                for k2 in v.keys():
+                    if str(k2).lower() == want:
+                        return str(v[k2])
     except Exception:
-        return default
+        pass
+    return default
 
 
 # Public URL of the deployed app. Dynamic QR codes encode  BASE_URL/?r=<code>
