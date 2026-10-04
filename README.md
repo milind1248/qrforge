@@ -43,6 +43,9 @@ The SQLite database is created automatically at `data/qrforge.db`. **The first a
 Set `DATABASE_URL` (env var or Streamlit secret) to your Supabase **pooler** connection string and the app switches from SQLite to Postgres automatically: tables are created on first start (see `supabase/schema.sql`), and row-level security is enabled on every table so the public anon API cannot read them. Verified locally against PostgreSQL 17.
 Supabase Auth is not used yet; accounts are still in the `users` table with bcrypt hashes.
 
+## Email notifications
+With `SMTP_SENDER` + `SMTP_PASSWORD` set, QRForge emails: a welcome message and admin copy on signup, and a "new login" alert to the user (device, OS, browser, time) with an admin copy to `OWNER_EMAIL`. Login alerts are rate-limited to one per user per 10 minutes, sent in a background thread, and never block or break login.
+
 ## Original migration notes
 - `core/db.py` is the only module that touches storage. Re-implement the same functions against Supabase Postgres (tables mirror `SCHEMA`).
 - `core/auth.py`: replace with Supabase Auth (`sign_up`, `sign_in_with_password`) and store the user id in `st.session_state.uid`.

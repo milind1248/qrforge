@@ -45,10 +45,12 @@ CREATE TABLE IF NOT EXISTS reports(
 MIGRATIONS = {  # table -> {column: type}; keeps older local databases working
     "qrcodes": {"rules": "TEXT", "campaign": "TEXT", "trust_preview": "INTEGER DEFAULT 0",
                 "health": "TEXT", "health_at": "TEXT"},
+    "users": {"last_alert": "TEXT"},
     "scans": {"lang": "TEXT", "visitor": "TEXT", "outcome": "TEXT", "variant": "TEXT"},
 }
 
 
+PG_SCHEMA = "qrforge"
 PG_TS = "to_char(now() AT TIME ZONE 'utc','YYYY-MM-DD HH24:MI:SS')"
 
 
@@ -69,7 +71,11 @@ def _get_pool():
     if _pool is None:
         from psycopg.rows import dict_row
         from psycopg_pool import ConnectionPool
-        _pool = ConnectionPool(DATABASE_URL, min_size=1, max_size=4, open=True,
+        def configure(c):  # isolate QRForge in its own schema: never touches other apps' tables in `public`
+            c.execute(f"SET search_path TO {PG_SCHEMA}")
+            c.commit()
+
+        _pool = ConnectionPool(DATABASE_URL, min_size=1, max_size=4, open=True, configure=configure,
                                kwargs={"row_factory": dict_row, "prepare_threshold": None, "autocommit": False})
     return _pool
 
@@ -93,6 +99,7 @@ def conn():
 def init_db():
     if USE_PG:
         with conn() as c:
+            c.execute(f"CREATE SCHEMA IF NOT EXISTS {PG_SCHEMA}")
             for stmt in [x for x in _pg_schema().split(";") if x.strip()]:
                 c.execute(stmt)
             for table, cols in MIGRATIONS.items():
@@ -162,6 +169,16 @@ def set_plan(uid, plan, period=None):
     if plan != "free":
         exp = (datetime.utcnow() + timedelta(days=366 if period == "yearly" else 31)).isoformat()
     _x("UPDATE users SET plan=?, period=?, plan_expires=? WHERE id=?", (plan, period, exp, uid))
+
+
+def claim_login_alert(uid, min_minutes=10) -> bool:
+    """True (and stamps now) if no login alert was sent to this user in the last `min_minutes`."""
+    u = _one("SELECT last_alert FROM users WHERE id=?", (uid,))
+    now = datetime.utcnow()
+    if u and u["last_alert"] and u["last_alert"] > (now - timedelta(minutes=min_minutes)).isoformat(sep=" ", timespec="seconds"):
+        return False
+    _x("UPDATE users SET last_alert=? WHERE id=?", (now.isoformat(sep=" ", timespec="seconds"), uid))
+    return True
 
 
 def update_profile(uid, name, pw_hash=None):
