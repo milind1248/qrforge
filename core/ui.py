@@ -62,8 +62,14 @@ def lock_note(text: str):
 
 
 def footer():
-    st.markdown('<div class="footer">© QRForge · Create, track and manage QR codes · Made in India</div>',
-                unsafe_allow_html=True)
+    import base64
+
+    from core.config import ROOT
+    b64 = base64.b64encode((ROOT / "assets" / "sugi_logo.png").read_bytes()).decode()
+    st.markdown(
+        f'<div class="footer"><img src="data:image/png;base64,{b64}" width="84" style="display:block;margin:0 auto .4rem"/>'
+        'QRForge · a Sugi product · Digital products made simple<br>Create, track and manage QR codes · Made in India</div>',
+        unsafe_allow_html=True)
 
 
 def parse_ua(ua: str) -> tuple[str, str, str]:

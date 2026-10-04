@@ -182,7 +182,15 @@ for q, a in [
      "redirects to your destination, so you can edit the destination later and see scan analytics."),
     ("Do my static QR codes expire?", "No. Static codes work forever, even if you cancel your account."),
     ("What happens to my printed codes if I cancel or downgrade?", "They keep working. Premium routing rules pause and visitors see a short QRForge trust page, but your base destination stays live. We never switch a printed code off to force you to pay."),
-    ("Can I get a refund?", "Contact support within 7 days of purchase and we will refund you in full."),
+    ("Can I get a refund?",
+     "No. All payments are final and non-refundable. Here is why: QRForge is a digital service. The moment your payment is "
+     "verified, your plan is activated and the resources behind it are reserved for you (dynamic-link hosting, scan tracking "
+     "and analytics storage, and support). That cost is incurred immediately and cannot be recovered, and a digital service "
+     "cannot be 'returned' like a physical product. "
+     "To make sure you never pay for something that does not fit, you can try QR generation, the safety score and the scan "
+     "test on the **Free plan** before buying, and you can cancel at any time so you are never charged again. Your printed "
+     "dynamic codes also keep working after you cancel. The only exception is a genuine billing error on our side, such as "
+     "a duplicate payment, which we will correct."),
 ]:
     with st.expander(q):
         st.write(a)
