@@ -9,12 +9,14 @@ from urllib.parse import quote
 from PIL import Image, ImageDraw, ImageFont
 
 from core import db, event_db as E
+from core.i18n import _
 from core.config import BASE_URL
 from core.qr_engine import render as render_qr
 
 PASS_W, PASS_H = 1080, 1520
 INDIGO, VIOLET, INK, MUTED = (79, 70, 229), (124, 58, 237), (15, 23, 42), (100, 116, 139)
-FONT_DIRS = ("C:/Windows/Fonts/", "/usr/share/fonts/truetype/dejavu/", "/usr/share/fonts/truetype/liberation/", "/usr/share/fonts/truetype/noto/")
+FONT_DIRS = ("C:/Windows/Fonts/", "/usr/share/fonts/truetype/dejavu/", "/usr/share/fonts/truetype/liberation/", "/usr/share/fonts/truetype/noto/",
+             "/usr/share/fonts/opentype/noto/", "/usr/share/fonts/noto/")
 
 
 # ----------------------------------------------------------------------------- links
@@ -65,6 +67,10 @@ def nice_date(ev: dict) -> str:
         " to " + E.event_end(ev).strftime("%I:%M %p").lstrip("0") if ev.get("end_time") else "")
 
 
+def ticket_label_i18n(ev: dict, b: dict) -> str:
+    return _("Paid  Rs {amt}", amt=b["amount"]) if ev["is_paid"] else _("Free entry")
+
+
 def ticket_label(ev: dict, b: dict) -> str:
     return f"Paid  Rs {b['amount']}" if ev["is_paid"] else "Free entry"
 
@@ -96,6 +102,19 @@ def _font(size: int, bold: bool = False) -> ImageFont.FreeTypeFont:
         return ImageFont.load_default()
 
 
+def _pick(text: str, size: int, bold: bool = False) -> ImageFont.FreeTypeFont:
+    """Font for a piece of text: a Devanagari-capable font (Hindi / Marathi names) when the text contains Devanagari, else the normal one."""
+    if any("ऀ" <= ch <= "ॿ" for ch in text or ""):
+        names = ("NirmalaB.ttf", "NotoSansDevanagari-Bold.ttf", "NotoSansDevanagariUI-Bold.ttf") if bold else ("Nirmala.ttf", "NotoSansDevanagari-Regular.ttf", "NotoSansDevanagariUI-Regular.ttf")
+        for d in FONT_DIRS:
+            for n in names:
+                try:
+                    return ImageFont.truetype(d + n, size)
+                except OSError:
+                    continue
+    return _font(size, bold)
+
+
 def _wrap(draw: ImageDraw.ImageDraw, text: str, font, max_w: int, max_lines: int) -> list[str]:
     words, lines, cur = (text or "").split(), [], ""
     for w in words:
@@ -123,20 +142,20 @@ def pass_image(ev: dict, b: dict) -> Image.Image:
         c = tuple(int(INDIGO[i] + (VIOLET[i] - INDIGO[i]) * t) for i in range(3))
         d.line([(0, y), (PASS_W, y)], fill=c)
     d.text((60, 44), "EVENT PASS", font=_font(30, True), fill=(210, 205, 255))
-    f_title = _font(64, True)
+    f_title = _pick(ev["name"], 64, True)
     for i, ln in enumerate(_wrap(d, ev["name"], f_title, PASS_W - 120, 2)):
         d.text((60, 96 + i * 78), ln, font=f_title, fill="white")
     y = 380
     for label, value in (("DATE & TIME", nice_date(ev)), ("VENUE", ev["venue"])):
         d.text((60, y), label, font=_font(24, True), fill=MUTED)
-        f = _font(38, True)
+        f = _pick(value, 38, True)
         for j, ln in enumerate(_wrap(d, value, f, PASS_W - 120, 2)):
             d.text((60, y + 34 + j * 46), ln, font=f, fill=INK)
         y += 34 + 46 * (len(_wrap(d, value, f, PASS_W - 120, 2)) or 1) + 26
     d.line([(60, y), (PASS_W - 60, y)], fill=(226, 232, 240), width=3)
     y += 24
     d.text((60, y), "ATTENDEE", font=_font(24, True), fill=MUTED)
-    f_name = _font(50, True)
+    f_name = _pick(b["name"], 50, True)
     for j, ln in enumerate(_wrap(d, b["name"], f_name, PASS_W - 120, 1)):
         d.text((60, y + 34), ln, font=f_name, fill=INK)
     d.text((PASS_W - 60 - d.textlength(ticket_label(ev, b), font=_font(30, True)), y + 6), ticket_label(ev, b), font=_font(30, True), fill=INDIGO)
@@ -189,25 +208,25 @@ def card_html(ev: dict, b: dict) -> str:
     qr64 = base64.b64encode(qr_png_bytes(pass_url(b["token"]), 360)).decode()
     status = b["status"]
     if b["checked_in_at"] and status == "confirmed":
-        badge, col = f"Checked in {E.fmt_utc(b['checked_in_at'], '%d %b, %I:%M %p')}", "#B45309"
+        badge, col = _("Checked in {when}", when=E.fmt_utc(b["checked_in_at"], "%d %b, %I:%M %p")), "#B45309"
     else:
-        badge, col = {"confirmed": ("Valid", "#059669"), "pending_payment": ("Payment under review", "#B45309"),
-                      "cancelled": ("Cancelled", "#DC2626"), "rejected": ("Payment not accepted", "#DC2626")}.get(status, (status, "#475569"))
+        badge, col = {"confirmed": (_("Valid"), "#059669"), "pending_payment": (_("Payment under review"), "#B45309"),
+                      "cancelled": (_("Cancelled"), "#DC2626"), "rejected": (_("Payment not accepted"), "#DC2626")}.get(status, (status, "#475569"))
     dim = "" if status == "confirmed" and not b["checked_in_at"] else "opacity:.45;"
     return (f"<div class='pass-print' data-ref='{e(b['ref'])}' style='max-width:430px;margin:0 auto;border:1px solid #E2E8F0;border-radius:22px;overflow:hidden;background:#fff;"
             f"box-shadow:0 12px 32px rgba(79,70,229,.14);font-family:Inter,Arial,sans-serif'>"
             f"<div style='background:linear-gradient(135deg,#4F46E5,#7C3AED);color:#fff;padding:20px 22px'>"
-            f"<div style='font-size:12px;letter-spacing:.14em;opacity:.8;font-weight:700'>EVENT PASS</div>"
+            f"<div style='font-size:12px;letter-spacing:.14em;opacity:.8;font-weight:700'>{_('EVENT PASS')}</div>"
             f"<div style='font-size:24px;font-weight:800;line-height:1.2;margin-top:4px'>{e(ev['name'])}</div></div>"
             f"<div style='padding:18px 22px'>"
-            f"<div style='font-size:11px;color:#64748B;font-weight:700;letter-spacing:.08em'>DATE &amp; TIME</div><div style='font-weight:700;color:#0F172A'>{e(nice_date(ev))}</div>"
-            f"<div style='font-size:11px;color:#64748B;font-weight:700;letter-spacing:.08em;margin-top:10px'>VENUE</div><div style='font-weight:700;color:#0F172A'>{e(ev['venue'])}</div>"
+            f"<div style='font-size:11px;color:#64748B;font-weight:700;letter-spacing:.08em'>{_('DATE & TIME')}</div><div style='font-weight:700;color:#0F172A'>{e(nice_date(ev))}</div>"
+            f"<div style='font-size:11px;color:#64748B;font-weight:700;letter-spacing:.08em;margin-top:10px'>{_('VENUE')}</div><div style='font-weight:700;color:#0F172A'>{e(ev['venue'])}</div>"
             f"<div style='border-top:1px solid #E2E8F0;margin:14px 0'></div>"
             f"<div style='display:flex;justify-content:space-between;align-items:flex-end;gap:10px'>"
-            f"<div><div style='font-size:11px;color:#64748B;font-weight:700;letter-spacing:.08em'>ATTENDEE</div><div style='font-size:20px;font-weight:800;color:#0F172A'>{e(b['name'])}</div></div>"
-            f"<div style='font-weight:700;color:#4F46E5'>{e(ticket_label(ev, b))}</div></div>"
+            f"<div><div style='font-size:11px;color:#64748B;font-weight:700;letter-spacing:.08em'>{_('ATTENDEE')}</div><div style='font-size:20px;font-weight:800;color:#0F172A'>{e(b['name'])}</div></div>"
+            f"<div style='font-weight:700;color:#4F46E5'>{e(ticket_label_i18n(ev, b))}</div></div>"
             f"<div style='text-align:center;margin:16px 0 4px;{dim}'><img src='data:image/png;base64,{qr64}' style='width:240px;height:240px;border:1px solid #CBD5E1;border-radius:14px;padding:8px'/></div>"
             f"<div style='text-align:center;font-size:26px;font-weight:800;color:#0F172A;letter-spacing:.04em'>{e(b['ref'])}</div>"
-            f"<div style='text-align:center;font-size:11px;color:#64748B;font-weight:700;letter-spacing:.1em'>BOOKING ID</div>"
+            f"<div style='text-align:center;font-size:11px;color:#64748B;font-weight:700;letter-spacing:.1em'>{_('BOOKING ID')}</div>"
             f"<div style='text-align:center;margin-top:12px'><span style='background:{col}1A;color:{col};padding:5px 14px;border-radius:999px;font-weight:700;font-size:13px'>{e(badge)}</span></div>"
             f"</div></div>")

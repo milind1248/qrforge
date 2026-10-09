@@ -136,6 +136,7 @@ export default function (component) {
   const { data, parentElement } = component
   const b = parentElement.querySelector('.pb')
   if (!b) return
+  if (data && data.label) b.textContent = data.label
   b.onclick = () => {
     // print ONLY this attendee's pass card in a clean window (the rest of the app page is left out)
     const doc = parentElement.ownerDocument
@@ -161,7 +162,8 @@ def live_scanner(key: str, result: str = "", nonce: int = 0):
 
 
 def print_button(key: str, ref: str = ""):
-    _PRINT(key=key, data={"ref": ref})
+    from core.i18n import _
+    _PRINT(key=key, data={"ref": ref, "label": _("Print this pass")})
 
 
 def frame_to_bytes(data_url: str, max_bytes: int = 600_000) -> bytes | None:

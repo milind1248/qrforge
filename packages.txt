@@ -1,0 +1,3 @@
+fonts-noto-core
+libfribidi0
+libraqm0

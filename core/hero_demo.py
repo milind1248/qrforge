@@ -1,9 +1,11 @@
 """Animated home-page demo: a link is typed, the QR builds, a phone scans it and the page opens. Pure CSS/JS in a CCv2 component (no media files)."""
 import streamlit as st
 
+from core.i18n import _
+
 _HTML = """
 <div class="hd">
-  <div class="hd-steps"><span>1 Type a link</span><span>2 QR builds</span><span>3 Phone scans it</span></div>
+  <div class="hd-steps"><span></span><span></span><span></span></div>
   <div class="hd-row">
     <svg class="hd-qr" width="104" height="104" viewBox="0 0 10 10" role="img" aria-label="QR code being built"></svg>
     <div class="hd-phone">
@@ -13,10 +15,10 @@ _HTML = """
         <svg class="hd-qr2" width="44" height="44" viewBox="0 0 10 10" aria-hidden="true"></svg>
         <div class="hd-beam"></div>
       </div>
-      <div class="hd-ok"><div class="hd-tick">&#10003;</div><b>Menu opened</b><span>shop.in/menu</span></div>
-      <div class="hd-hint">Point camera at the code</div>
+      <div class="hd-ok"><div class="hd-tick">&#10003;</div><b class="hd-menu"></b><span>shop.in/menu</span></div>
+      <div class="hd-hint"></div>
     </div>
-    <div class="hd-count"><i>Scans today</i><b>0</b></div>
+    <div class="hd-count"><i class="hd-scans"></i><b>0</b></div>
   </div>
 </div>
 """
@@ -48,7 +50,8 @@ _CSS = """
 
 _JS = """
 export default function (component) {
-  const { parentElement } = component
+  const { parentElement, data } = component
+  const L = (data && data.t) || {}
   const root = parentElement.querySelector('.hd')
   if (!root) return
   const NS = 'http://www.w3.org/2000/svg'
@@ -67,14 +70,17 @@ export default function (component) {
   const $ = (s) => root.querySelector(s)
   const steps = [...root.querySelectorAll('.hd-steps span')], typed = steps[0], beam = $('.hd-beam'), ok = $('.hd-ok'), hint = $('.hd-hint'), cnt = $('.hd-count b')
   const text = 'shop.in/menu'
+  const lab = (k, d) => L[k] || d
+  steps[1].textContent = '2 ' + lab('build', 'QR builds'); steps[2].textContent = '3 ' + lab('scan', 'Phone scans it')
+  root.querySelector('.hd-menu').textContent = lab('opened', 'Menu opened'); root.querySelector('.hd-scans').textContent = lab('today', 'Scans today')
   const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
   let timers = [], alive = true, n = 0
   const at = (fn, ms) => { const t = setTimeout(() => { if (alive) fn() }, ms); timers.push(t) }
   const mark = (i) => steps.forEach((s, j) => s.classList.toggle('on', j === i))
   function run() {
     cells.forEach(c => { c.style.opacity = 0; c.style.transition = 'opacity .25s' })
-    typed.textContent = '1 Type a link'; ok.style.opacity = 0; q2.style.opacity = 0; q2.style.transform = 'scale(.5)'; beam.style.opacity = 0
-    hint.textContent = 'Point camera at the code'; mark(0)
+    typed.textContent = '1 ' + lab('type', 'Type a link'); ok.style.opacity = 0; q2.style.opacity = 0; q2.style.transform = 'scale(.5)'; beam.style.opacity = 0
+    hint.textContent = lab('point', 'Point camera at the code'); mark(0)
     for (let i = 1; i <= text.length; i++) at(() => { typed.textContent = '1 ' + text.slice(0, i) + '|' }, 90 * i)
     const t1 = 90 * text.length + 200
     at(() => { typed.textContent = '1 ' + text; mark(1) }, t1)
@@ -82,14 +88,14 @@ export default function (component) {
     for (let k = 0; k < nsteps; k++) at(() => cells.slice(k * per, k * per + per).forEach(c => { c.style.opacity = 1 }), t1 + 40 * k)
     const t2 = t1 + 40 * nsteps + 300
     at(() => { mark(2); q2.style.opacity = 1 }, t2)
-    at(() => { q2.style.transform = 'scale(1)'; hint.textContent = 'Scanning...'; beam.style.opacity = 1 }, t2 + 300)
+    at(() => { q2.style.transform = 'scale(1)'; hint.textContent = lab('scanning', 'Scanning...'); beam.style.opacity = 1 }, t2 + 300)
     let y = 16, d = 1.5
     for (let f = 0; f < 90; f++) at(() => { y += d; if (y > 80) d = -2; if (y < 16) d = 2; beam.style.top = y + 'px' }, t2 + 300 + 16 * f)
-    at(() => { beam.style.opacity = 0; hint.textContent = 'Got it' }, t2 + 1800)
+    at(() => { beam.style.opacity = 0; hint.textContent = lab('got', 'Got it') }, t2 + 1800)
     at(() => { ok.style.opacity = 1; cnt.textContent = ++n }, t2 + 2200)
     at(() => { timers = []; run() }, t2 + 5200)
   }
-  if (reduce) { cells.forEach(c => { c.style.opacity = 1 }); typed.textContent = '1 ' + text; mark(2); q2.style.opacity = 1; q2.style.transform = 'scale(1)'; hint.textContent = 'Scan and go' }
+  if (reduce) { cells.forEach(c => { c.style.opacity = 1 }); typed.textContent = '1 ' + text; mark(2); q2.style.opacity = 1; q2.style.transform = 'scale(1)'; hint.textContent = lab('scanning', 'Scanning...') }
   else run()
   return () => { alive = false; timers.forEach(clearTimeout) }
 }
@@ -99,4 +105,6 @@ _DEMO = st.components.v2.component("qrforge_hero_demo", html=_HTML, css=_CSS, js
 
 
 def hero_demo(key: str = "hero_demo"):
-    _DEMO(key=key)
+    t = {"type": _("Type a link"), "build": _("QR builds"), "scan": _("Phone scans it"), "today": _("Scans today"), "point": _("Point camera at the code"),
+         "scanning": _("Scanning..."), "got": _("Got it"), "opened": _("Menu opened")}
+    _DEMO(key=key, data={"t": t})

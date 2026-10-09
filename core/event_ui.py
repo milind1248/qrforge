@@ -7,6 +7,7 @@ import pandas as pd
 import streamlit as st
 
 from core import event_db as E, event_pass as P, qr_engine, scanner
+from core.i18n import _
 
 RESULT_STYLE = {
     "valid": ("VALID", "#047857", "#D1FAE5", "&#10003;"),
@@ -37,7 +38,7 @@ def result_banner(res: dict):
 def scans_table(eid: int, limit: int = 15):
     rows = E.recent_scans(eid, limit)
     if not rows:
-        st.caption("No scans yet.")
+        st.caption(_("No scans yet."))
         return
     df = pd.DataFrame([{"Time": E.fmt_utc(r["ts"], "%d %b, %I:%M:%S %p"), "Result": RESULT_ICON.get(r["result"], r["result"]), "Booking": r["ref"] or "",
                         "Name": r["name"] or "", "By": r["actor"] or ""} for r in rows])
@@ -62,9 +63,9 @@ def scanner_panel(event_id: int, actor: str, key: str):
     if ss.get(f"{key}_res"):                    # result first, so it is visible on a phone without scrolling past the camera
         result_banner(ss[f"{key}_res"])
     else:
-        st.info("Scan a pass with the camera, type the booking ID below, or take a photo of the pass.", icon=":material/qr_code_scanner:")
-    mark = st.toggle("Check in automatically when a valid pass is scanned", value=True, key=f"{key}_mark",
-                     help="Turn off to only verify a pass without marking the attendee as arrived.")
+        st.info(_("Scan a pass with the camera, type the booking ID below, or take a photo of the pass."), icon=":material/qr_code_scanner:")
+    mark = st.toggle(_("Check in automatically when a valid pass is scanned"), value=True, key=f"{key}_mark",
+                     help=_("Turn off to only verify a pass without marking the attendee as arrived."))
     code, frame = scanner.live_scanner(f"{key}_cam", (ss.get(f"{key}_res") or {}).get("result", ""), ss.get(f"{key}_nonce", 0))
     raw = code
     if not raw and frame:
@@ -77,12 +78,12 @@ def scanner_panel(event_id: int, actor: str, key: str):
             st.rerun(scope="fragment")
     with st.form(f"{key}_manual", clear_on_submit=True):
         m1, m2 = st.columns([4, 1])
-        txt = m1.text_input("Booking ID or pass link", placeholder="EVT-7K2M9Q", label_visibility="collapsed")
+        txt = m1.text_input(_("Booking ID or pass link"), placeholder=_("EVT-7K2M9Q"), label_visibility="collapsed")
         go = m2.form_submit_button("Check", type="primary", width="stretch")
     if go and txt.strip():
         _handle(ev, txt, actor, key, mark)
         st.rerun(scope="fragment")
-    with st.expander("Camera not working? Take a photo of the pass instead"):
+    with st.expander(_("Camera not working? Take a photo of the pass instead")):
         shot = st.camera_input("Photo of the pass QR", key=f"{key}_photo", label_visibility="collapsed")
         if shot is not None:
             data = shot.getvalue()
@@ -100,29 +101,29 @@ def pass_view(ev: dict, b: dict, key: str, allow_cancel: bool = True):
     """The attendee's pass: card, downloads, print, calendar and WhatsApp share."""
     st.markdown(P.card_html(ev, b), unsafe_allow_html=True)
     if b["status"] == "pending_payment":
-        st.info("Your payment is being reviewed by the organizer. This pass becomes active as soon as it is approved, and you will get an email.", icon=":material/hourglass_top:")
+        st.info(_("Your payment is being reviewed by the organizer. This pass becomes active as soon as it is approved, and you will get an email."), icon=":material/hourglass_top:")
         return
     if b["status"] in ("cancelled", "rejected"):
-        st.error("This booking is not valid anymore." if b["status"] == "cancelled" else "Your payment was not accepted, so this pass is not valid.")
+        st.error(_("This booking is not valid anymore.") if b["status"] == "cancelled" else _("Your payment was not accepted, so this pass is not valid."))
         return
     st.write("")
     c1, c2, c3 = st.columns(3)
-    c1.download_button("Download pass (PNG)", P.pass_png(ev, b), f"pass-{b['ref']}.png", "image/png", key=f"{key}_png", width="stretch", icon=":material/download:")
-    c2.download_button("Download pass (PDF)", P.pass_pdf(ev, b), f"pass-{b['ref']}.pdf", "application/pdf", key=f"{key}_pdf", width="stretch", icon=":material/picture_as_pdf:")
-    c3.download_button("Add to calendar", P.ics_text(ev, b), f"{ev['code']}.ics", "text/calendar", key=f"{key}_ics", width="stretch", icon=":material/event:")
+    c1.download_button(_("Download pass (PNG)"), P.pass_png(ev, b), f"pass-{b['ref']}.png", "image/png", key=f"{key}_png", width="stretch", icon=":material/download:")
+    c2.download_button(_("Download pass (PDF)"), P.pass_pdf(ev, b), f"pass-{b['ref']}.pdf", "application/pdf", key=f"{key}_pdf", width="stretch", icon=":material/picture_as_pdf:")
+    c3.download_button(_("Add to calendar"), P.ics_text(ev, b), f"{ev['code']}.ics", "text/calendar", key=f"{key}_ics", width="stretch", icon=":material/event:")
     d1, d2 = st.columns(2)
     with d1:
         scanner.print_button(f"{key}_print", b["ref"])
     if b.get("phone"):
-        d2.link_button("Send to my WhatsApp", P.whatsapp_link(b["phone"], P.pass_share_text(ev, b)), width="stretch", icon=":material/chat:")
+        d2.link_button(_("Send to my WhatsApp"), P.whatsapp_link(b["phone"], P.pass_share_text(ev, b)), width="stretch", icon=":material/chat:")
     else:
-        d2.link_button("Share on WhatsApp", P.whatsapp_link("", P.pass_share_text(ev, b)), width="stretch", icon=":material/chat:")
+        d2.link_button(_("Share on WhatsApp"), P.whatsapp_link("", P.pass_share_text(ev, b)), width="stretch", icon=":material/chat:")
     if b["checked_in_at"]:
-        st.success(f"Checked in on {E.fmt_utc(b['checked_in_at'], '%d %b %Y, %I:%M %p')}. Welcome!")
-    st.markdown(f"**Event details:** [{P.event_url(ev['code'])}]({P.event_url(ev['code'])})")
+        st.success(_("Checked in on {when}. Welcome!", when=E.fmt_utc(b["checked_in_at"], "%d %b %Y, %I:%M %p")))
+    st.markdown(f"**{_('Event details')}:** [{P.event_url(ev['code'])}]({P.event_url(ev['code'])})")
     if contact := P.contact_text(ev):
-        st.markdown(f"**Organizer contact:** {contact}")
+        st.markdown(f"**{_('Organizer contact')}:** {contact}")
     if allow_cancel and E.attendee_can_cancel(ev, b)[0]:
-        st.link_button("Cancel this booking", P.cancel_url(b["token"]), icon=":material/event_busy:")
+        st.link_button(_("Cancel this booking"), P.cancel_url(b["token"]), icon=":material/event_busy:")
         if ev["is_paid"]:
-            st.caption("Refunds for paid tickets are handled by the organizer.")
+            st.caption(_("Refunds for paid tickets are handled by the organizer."))
