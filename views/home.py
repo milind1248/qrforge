@@ -9,12 +9,12 @@ import streamlit as st
 from core import auth, db, qr_engine as qe, safety, scan_test
 from core.config import BASE_URL
 from core.plans import PLANS, get_plan
-from core.ui import footer, hero, lock_note
+from core.ui import footer, hero_split, lock_note
 
 user = auth.current_user()
 plan = get_plan(user["plan"] if user else "free")
 
-hero("Create QR codes that look great<br>and work everywhere",
+hero_split("Create QR codes that look great<br>and work everywhere",
      "Static codes are free forever. Go dynamic to edit destinations after printing and track every scan.",
      "Free QR code generator · no signup needed")
 

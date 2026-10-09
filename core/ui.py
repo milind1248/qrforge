@@ -20,6 +20,11 @@ h1, h2, h3 { letter-spacing: -0.02em; }
   background: linear-gradient(90deg,#4F46E5,#7C3AED 55%,#EC4899); -webkit-background-clip: text;
   background-clip: text; color: transparent; }
 .hero p { color:#475569; font-size:1.1rem; max-width: 680px; margin: 0 auto; }
+.hero-l { text-align:left; padding: .4rem 0 .2rem; }
+.hero-l h1 { font-size: 2rem; font-weight: 800; line-height: 1.12; margin: 0 0 .5rem;
+  background: linear-gradient(90deg,#4F46E5,#7C3AED 55%,#EC4899); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hero-l p { color:#475569; font-size:1rem; margin: 0; }
+@media (max-width: 900px) { .hero-l { text-align:center; } }
 .pill { display:inline-block; padding:.2rem .7rem; border-radius:999px; background:#EEF2FF; color:#4338CA;
   font-size:.78rem; font-weight:600; margin-bottom:.8rem; border:1px solid #C7D2FE; }
 .card { background:#fff; border:1px solid #E2E8F0; border-radius:18px; padding:1.3rem 1.4rem;
@@ -55,6 +60,17 @@ div[data-testid="stMetric"] { background:#fff; border:1px solid #E2E8F0; border-
 
 def inject_css():
     st.markdown(CSS, unsafe_allow_html=True)
+
+
+def hero_split(title: str, sub: str, pill: str | None = None):
+    """Hero with the text on the left and the animated demo on the right, so it takes no more height than the plain hero."""
+    from core.hero_demo import hero_demo
+    left, right = st.columns([1.2, 1], gap="medium", vertical_alignment="center")
+    with left:
+        pill_html = f'<div class="pill">{pill}</div>' if pill else ""
+        st.markdown(f'<div class="hero-l">{pill_html}<h1>{title}</h1><p>{sub}</p></div>', unsafe_allow_html=True)
+    with right:
+        hero_demo()
 
 
 def hero(title: str, sub: str, pill: str | None = None):
