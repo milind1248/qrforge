@@ -1,9 +1,16 @@
 """Site counters for the sidebar: visits, QR codes created, and the creators leaderboard. Counters live in the existing `settings` table."""
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 import streamlit as st
 
 from core import db
+
+
+IST = timezone(timedelta(hours=5, minutes=30))
+
+
+def _today() -> str:
+    return datetime.now(IST).strftime("%Y-%m-%d")
 
 
 def _bump(key: str, by: int = 1):
@@ -38,7 +45,7 @@ def count_visit():
         return
     try:
         _bump("stat:visits:total")
-        _bump("stat:visits:" + datetime.now(timezone.utc).strftime("%Y-%m-%d"))
+        _bump("stat:visits:" + _today())
     except Exception:  # noqa: BLE001 - a counter must never break a page
         pass
 
@@ -46,14 +53,27 @@ def count_visit():
 def count_download():
     try:
         _bump("stat:qr_downloads")
+        _bump("stat:qr_downloads:" + _today())
     except Exception:  # noqa: BLE001
         pass
 
 
 @st.cache_data(ttl=60, show_spinner=False)
-def snapshot() -> dict:
-    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+def snapshot(days: int = 7) -> dict:
+    """Totals plus QR codes created per day (saved codes + downloads) for the last `days` days, IST."""
+    today = datetime.now(IST).date()
+    series = [(today - timedelta(days=i)) for i in range(days - 1, -1, -1)]
+    per = {d.strftime("%Y-%m-%d"): 0 for d in series}
+    since = (datetime.now(timezone.utc) - timedelta(days=days + 1)).strftime("%Y-%m-%d %H:%M:%S")
+    for r in db._q("SELECT created_at FROM qrcodes WHERE created_at >= ?", (since,)):
+        try:
+            t = datetime.fromisoformat(str(r["created_at"])).replace(tzinfo=timezone.utc).astimezone(IST).strftime("%Y-%m-%d")
+        except ValueError:
+            continue
+        if t in per:
+            per[t] += 1
+    for k in per:
+        per[k] += _get("stat:qr_downloads:" + k)
     saved = db._one("SELECT COUNT(*) n FROM qrcodes")["n"]
-    board = db._q("SELECT u.name, COUNT(q.id) n FROM qrcodes q JOIN users u ON u.id=q.user_id GROUP BY u.id, u.name ORDER BY n DESC, u.name LIMIT 5")
-    return {"visits": _get("stat:visits:total"), "today": _get("stat:visits:" + today), "created": int(saved) + _get("stat:qr_downloads"),
-            "board": [{"name": (b["name"] or "Creator").strip().split(" ")[0][:14], "n": int(b["n"])} for b in board]}
+    return {"visits": _get("stat:visits:total"), "today": _get("stat:visits:" + _today()), "created": int(saved) + _get("stat:qr_downloads"),
+            "days": [{"date": d, "wd": d.weekday(), "label": d.strftime("%d"), "n": per[d.strftime("%Y-%m-%d")]} for d in series]}
