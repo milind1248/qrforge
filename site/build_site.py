@@ -14,7 +14,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 OUT = ROOT / "public"
-SITE_URL = os.environ.get("SITE_URL", "https://milind1248.github.io/qrforge").rstrip("/")
+SITE_URL = os.environ.get("SITE_URL", "https://qrcode.cfer.in").rstrip("/")
 APP_URL = os.environ.get("APP_URL", "https://qrcodescan.streamlit.app").rstrip("/")
 BRAND = "QRForge"
 TODAY = date.today().isoformat()
@@ -393,6 +393,10 @@ def main():
         if (src / name).exists():
             shutil.copy(src / name, OUT / dst)
     (OUT / ".nojekyll").write_text("")
+    host = SITE_URL.split("://", 1)[1].split("/")[0]
+    if "github.io" not in host:
+        (OUT / "CNAME").write_text(host + "
+")          # tells GitHub Pages which custom domain to serve
     print(f"built {len(urls)} pages -> {OUT}  (SITE_URL={SITE_URL})")
 
 
