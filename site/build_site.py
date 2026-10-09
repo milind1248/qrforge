@@ -14,7 +14,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 OUT = ROOT / "public"
-SITE_URL = os.environ.get("SITE_URL", "https://qrcode.cfer.in").rstrip("/")
+SITE_URL = os.environ.get("SITE_URL", "https://milind1248.github.io/qrforge").rstrip("/")
 APP_URL = os.environ.get("APP_URL", "https://qrcodescan.streamlit.app").rstrip("/")
 BRAND = "QRForge"
 TODAY = date.today().isoformat()
