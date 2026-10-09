@@ -122,7 +122,7 @@ def on_claim_decision(user_row: dict, plan: str, period: str, approved: bool, re
         send_async(user_row["email"], f"Your {APP_NAME} {plan.title()} plan is active",
                    f"Hi {user_row['name']}, your payment is verified and the {plan.title()} plan ({period}) is now active. {BASE_URL}",
                    _wrap("Your plan is active", [("Plan", f"{plan.title()} ({period})"), ("Status", "Active")],
-                         f"Thank you! <a href='{BASE_URL}'>Open QRForge</a> to use your new features."))
+                         f"Thank you! <a href='{BASE_URL}'>Open QR Sugi</a> to use your new features."))
     else:
         send_async(user_row["email"], f"Your {APP_NAME} payment claim could not be verified",
                    f"Hi {user_row['name']}, we could not verify your payment claim for the {plan.title()} plan. {reason}",

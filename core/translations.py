@@ -64,7 +64,7 @@ HI = {
     # ---- navigation / sidebar
     "QR Generator": "QR जनरेटर", "Scan": "स्कैन", "Pricing": "कीमतें", "Log in / Sign up": "लॉग इन / साइन अप", "My QR codes": "मेरे QR कोड",
     "My account": "मेरा अकाउंट", "Analytics": "एनालिटिक्स", "Bulk": "बल्क", "Billing": "बिलिंग", "Account": "अकाउंट", "Admin": "एडमिन",
-    "Welcome": "स्वागत है", "to QRForge": "QRForge में", "Renews / expires {date}": "नवीनीकरण / समाप्ति {date}", "Upgrade plan": "प्लान अपग्रेड करें", "Sign out": "साइन आउट",
+    "Welcome": "स्वागत है", "to QR Sugi": "QR Sugi में", "Renews / expires {date}": "नवीनीकरण / समाप्ति {date}", "Upgrade plan": "प्लान अपग्रेड करें", "Sign out": "साइन आउट",
     "Log in to save QR codes, go dynamic and track scans.": "QR कोड सेव करने, डायनामिक बनाने और स्कैन ट्रैक करने के लिए लॉग इन करें।",
     # ---- hero demo
     "Type a link": "लिंक लिखें", "QR builds": "QR बनता है", "Phone scans it": "फ़ोन स्कैन करता है", "Scans today": "आज के स्कैन",
@@ -119,7 +119,7 @@ HI = {
     "Print this pass": "यह पास प्रिंट करें",
     # ---- staff scanner
     "Staff PIN": "स्टाफ़ पिन", "Lock scanner": "स्कैनर लॉक करें", "No scans yet.": "अभी तक कोई स्कैन नहीं।",
-    "Live on QRForge": "QRForge पर अभी", "Visitors": "विज़िटर", "Today": "आज", "QR codes created": "बनाए गए QR कोड", "QR codes per day": "प्रतिदिन QR कोड", "Last 7 days": "पिछले 7 दिन",
+    "Live on QR Sugi": "QR Sugi पर अभी", "Visitors": "विज़िटर", "Today": "आज", "QR codes created": "बनाए गए QR कोड", "QR codes per day": "प्रतिदिन QR कोड", "Last 7 days": "पिछले 7 दिन",
     "Be the first to save a QR code!": "QR कोड सेव करने वाले पहले बनें!",
     "Contact us": "संपर्क करें", "Questions, feedback or a problem? Write to us and we will reply by email.": "सवाल, सुझाव या कोई समस्या? हमें लिखें, हम ईमेल से जवाब देंगे।",
     "Your name (optional)": "आपका नाम (वैकल्पिक)", "Your email": "आपका ईमेल", "Your query": "आपका सवाल", "e.g. Help with a dynamic QR code": "जैसे: डायनामिक QR कोड में मदद",
@@ -193,7 +193,7 @@ MR = {
     # ---- navigation / sidebar
     "QR Generator": "QR जनरेटर", "Scan": "स्कॅन", "Pricing": "किमती", "Log in / Sign up": "लॉग इन / साइन अप", "My QR codes": "माझे QR कोड",
     "My account": "माझे अकाउंट", "Analytics": "विश्लेषण", "Bulk": "बल्क", "Billing": "बिलिंग", "Account": "अकाउंट", "Admin": "अ‍ॅडमिन",
-    "Welcome": "स्वागत आहे", "to QRForge": "QRForge मध्ये", "Renews / expires {date}": "नूतनीकरण / समाप्ती {date}", "Upgrade plan": "प्लॅन अपग्रेड करा", "Sign out": "साइन आउट",
+    "Welcome": "स्वागत आहे", "to QR Sugi": "QR Sugi मध्ये", "Renews / expires {date}": "नूतनीकरण / समाप्ती {date}", "Upgrade plan": "प्लॅन अपग्रेड करा", "Sign out": "साइन आउट",
     "Log in to save QR codes, go dynamic and track scans.": "QR कोड सेव्ह करण्यासाठी, डायनॅमिक बनवण्यासाठी आणि स्कॅन ट्रॅक करण्यासाठी लॉग इन करा.",
     # ---- hero demo
     "Type a link": "लिंक लिहा", "QR builds": "QR तयार होतो", "Phone scans it": "फोन स्कॅन करतो", "Scans today": "आजचे स्कॅन",
@@ -248,7 +248,7 @@ MR = {
     "Print this pass": "हा पास प्रिंट करा",
     # ---- staff scanner
     "Staff PIN": "स्टाफ पिन", "Lock scanner": "स्कॅनर लॉक करा", "No scans yet.": "अजून कोणतेही स्कॅन नाहीत.",
-    "Live on QRForge": "QRForge वर आत्ता", "Visitors": "भेट देणारे", "Today": "आज", "QR codes created": "बनवलेले QR कोड", "QR codes per day": "दररोज QR कोड", "Last 7 days": "गेले 7 दिवस",
+    "Live on QR Sugi": "QR Sugi वर आत्ता", "Visitors": "भेट देणारे", "Today": "आज", "QR codes created": "बनवलेले QR कोड", "QR codes per day": "दररोज QR कोड", "Last 7 days": "गेले 7 दिवस",
     "Be the first to save a QR code!": "QR कोड सेव्ह करणारे पहिले व्हा!",
     "Contact us": "संपर्क करा", "Questions, feedback or a problem? Write to us and we will reply by email.": "प्रश्न, अभिप्राय किंवा अडचण? आम्हाला लिहा, आम्ही ईमेलने उत्तर देऊ.",
     "Your name (optional)": "तुमचे नाव (ऐच्छिक)", "Your email": "तुमचा ईमेल", "Your query": "तुमचा प्रश्न", "e.g. Help with a dynamic QR code": "उदा. डायनॅमिक QR कोडमध्ये मदत",

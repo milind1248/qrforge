@@ -1,10 +1,10 @@
-# QRForge: full content
+# QR Sugi: full content
 
 Source: https://milind1248.github.io/qrforge/ . App: https://qrcodescan.streamlit.app
 
 ## Free QR code generator for India
 
-QRForge is a free QR code generator. Pick what the code should do, type the details, and download a QR code that works on any phone camera. Static QR codes are free forever, never expire, and do not depend on our servers.
+QR Sugi is a free QR code generator. Pick what the code should do, type the details, and download a QR code that works on any phone camera. Static QR codes are free forever, never expire, and do not depend on our servers.
 
 ### What you can create
 
@@ -17,7 +17,7 @@ QRForge is a free QR code generator. Pick what the code should do, type the deta
 
 ### How to make a QR code in 3 steps
 
-- Open the QRForge generator and choose the QR type.
+- Open the QR Sugi generator and choose the QR type.
 - Enter your link or details. The preview updates as you type.
 - Choose colours and download the PNG. Paid plans add SVG, PDF and your logo.
 
@@ -27,11 +27,11 @@ A static QR code stores the data inside the pattern itself, so it keeps working 
 
 ### Test before you print
 
-QRForge includes a scan reliability test that simulates blur, small size, noise and tilt, and tells you the minimum print size for the distance people will scan from.
+QR Sugi includes a scan reliability test that simulates blur, small size, noise and tilt, and tells you the minimum print size for the distance people will scan from.
 
 ### FAQ
 
-**Is the QR code generator really free?** Yes. Creating and downloading static QR codes is free with no signup. Free downloads carry a small QRForge watermark; paid plans remove it.
+**Is the QR code generator really free?** Yes. Creating and downloading static QR codes is free with no signup. Free downloads carry a small QR Sugi watermark; paid plans remove it.
 **Do free QR codes expire?** No. Static QR codes never expire because the information is stored in the code itself.
 **Do I need an account?** No account is needed to create and download a static QR code. An account lets you save codes and create dynamic ones.
 
@@ -64,7 +64,7 @@ Always scan your own code with a different phone and confirm the payee name show
 
 **Does a UPI QR code work with all UPI apps?** Yes. It uses the standard UPI payment link that PhonePe, Google Pay, Paytm, BHIM and bank apps understand.
 **Can I set a fixed amount?** Yes. Add an amount to pre-fill it, or leave it empty so the customer enters the amount.
-**Is there any fee?** QRForge does not charge for the code and does not touch your money. Payments go directly to your UPI ID.
+**Is there any fee?** QR Sugi does not charge for the code and does not touch your money. Payments go directly to your UPI ID.
 
 ## WhatsApp QR code generator
 
@@ -142,7 +142,7 @@ Business cards, email signatures, stall banners, conference badges and shop wind
 
 ## Dynamic QR code generator with analytics
 
-A dynamic QR code points to a short QRForge link that redirects to your destination. The printed code never changes, but you can change where it goes at any time and see how many people scanned it.
+A dynamic QR code points to a short QR Sugi link that redirects to your destination. The printed code never changes, but you can change where it goes at any time and see how many people scanned it.
 
 ### What dynamic codes add
 
@@ -158,7 +158,7 @@ If you cancel a paid plan or reach a limit, your printed dynamic codes keep redi
 
 ### Important to know
 
-Dynamic codes depend on the QRForge redirect being online. For information that should work forever with no dependency, such as Wi-Fi or a contact card, use a static QR code.
+Dynamic codes depend on the QR Sugi redirect being online. For information that should work forever with no dependency, such as Wi-Fi or a contact card, use a static QR code.
 
 ### Plans
 
@@ -171,7 +171,7 @@ The free plan includes 2 dynamic QR codes. See pricing.
 
 ## Event registration with QR code passes
 
-QRForge Events lets you create an event, collect bookings, give every attendee a unique QR pass, and check people in at the door with a phone camera. The organizer dashboard shows live attendance and exports to Excel.
+QR Sugi Events lets you create an event, collect bookings, give every attendee a unique QR pass, and check people in at the door with a phone camera. The organizer dashboard shows live attendance and exports to Excel.
 
 ### How it works
 
@@ -196,7 +196,7 @@ Meetups, workshops, college fests, community and society events, classes, and sm
 
 **Can I sell tickets?** Yes. Paid events show your UPI QR with the amount. The attendee enters the transaction ID and you approve the payment, after which the pass is emailed.
 **Can attendees cancel?** Yes. Every pass has a cancel link that asks for confirmation. The seat is released and the cancellation appears in your report.
-**What happens if the internet is down at the gate?** Scanning needs the QRForge site. Keep an Excel export of the attendee list as a backup and use the booking ID to check people in manually.
+**What happens if the internet is down at the gate?** Scanning needs the QR Sugi site. Keep an Excel export of the attendee list as a backup and use the booking ID to check people in manually.
 
 ## QR codes for restaurants and cafes
 
@@ -221,7 +221,7 @@ Use dark code on a light background, print at least 3 cm wide for table cards, a
 **Can I change the menu later?** Yes, with a dynamic QR code you edit the destination and the printed code keeps working.
 **Can guests scan in low light?** Choose a high-contrast colour pair and a larger print size. The scan test warns you about low contrast.
 
-## QRForge pricing
+## QR Sugi pricing
 
 Static QR codes are free forever on every plan. Paid plans add more dynamic QR codes, longer analytics, your logo, more formats, bulk generation and larger events. Prices are in Indian rupees.
 

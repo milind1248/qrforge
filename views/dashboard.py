@@ -131,7 +131,7 @@ for q in qrs:
                            disabled=plan.key == "free",
                            help="Visitors see the destination domain and who published the code. Protects against sticker-swap scams.")
             if plan.key == "free":
-                lock_note("Free-plan codes always show the short QRForge trust page. Upgrade for direct redirects and your own branding.")
+                lock_note("Free-plan codes always show the short QR Sugi trust page. Upgrade for direct redirects and your own branding.")
             st.markdown("**Campaign tracking (UTM)**")
             u1, u2, u3 = st.columns(3)
             nutm = {"source": u1.text_input("utm_source", utm.get("source", ""), key=f"us_{q['id']}", placeholder="flyer"),

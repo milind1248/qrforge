@@ -319,7 +319,7 @@ def settings(ev: dict):
         E.update_event(eid, d)
         _flash("Event updated.")
     st.markdown("##### Co-organizers")
-    st.caption("People you add can see this event's dashboard, attendees and scanner. They need a QRForge account.")
+    st.caption("People you add can see this event's dashboard, attendees and scanner. They need a QR Sugi account.")
     for m in E.team(eid):
         a, b = st.columns([4, 1])
         a.write(f"{m['name']} · {m['email']}")

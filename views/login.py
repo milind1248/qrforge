@@ -6,7 +6,7 @@ import streamlit as st
 from core import auth
 from core.ui import hero
 
-hero("Welcome to QRForge", "Log in or create a free account to save QR codes, go dynamic and track scans.")
+hero("Welcome to QR Sugi", "Log in or create a free account to save QR codes, go dynamic and track scans.")
 
 _, mid, _ = st.columns([1, 1.6, 1])
 with mid:

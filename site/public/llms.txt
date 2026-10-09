@@ -1,9 +1,9 @@
-# QRForge
+# QR Sugi
 
-> QRForge is a free QR code generator for India. It creates static and dynamic QR codes (website, UPI payment, WhatsApp, Wi-Fi, vCard contact card, SMS, phone, email, location, calendar), shows scan analytics, and includes event registration with unique QR passes, phone-camera gate scanning and Excel attendance reports. Static QR codes are free forever and never expire. The site is available in English, Hindi and Marathi. Prices are in Indian rupees.
+> QR Sugi is a free QR code generator for India. It creates static and dynamic QR codes (website, UPI payment, WhatsApp, Wi-Fi, vCard contact card, SMS, phone, email, location, calendar), shows scan analytics, and includes event registration with unique QR passes, phone-camera gate scanning and Excel attendance reports. Static QR codes are free forever and never expire. The site is available in English, Hindi and Marathi. Prices are in Indian rupees.
 
 ## Use the tool
-- [QRForge QR code generator (web app)](https://qrcodescan.streamlit.app): create, design and download QR codes
+- [QR Sugi QR code generator (web app)](https://qrcodescan.streamlit.app): create, design and download QR codes
 
 ## Guides
 - [Free QR code generator for India](https://milind1248.github.io/qrforge/free-qr-code-generator.html): Make a QR code free in seconds: website, text, Wi-Fi, contact card, WhatsApp, UPI. Static QR codes never expire. Custom colours and PNG download. No signup.
@@ -14,7 +14,7 @@
 - [Dynamic QR code generator with analytics](https://milind1248.github.io/qrforge/dynamic-qr-code-generator.html): Create editable dynamic QR codes: change the destination after printing, pause codes, and track scans by day, device and browser. Free plan includes 2.
 - [Event registration with QR code passes](https://milind1248.github.io/qrforge/event-registration-qr-code.html): Create an event, take free or UPI-paid bookings, email each guest a QR pass, scan entries at the gate with a phone, and export attendance to Excel.
 - [QR codes for restaurants and cafes](https://milind1248.github.io/qrforge/restaurant-menu-qr-code.html): Create a QR code for your restaurant menu, UPI table payment and review link. Update the menu link without reprinting table cards with a dynamic QR.
-- [QRForge pricing](https://milind1248.github.io/qrforge/pricing.html): QRForge plans start free. Starter ₹249/month, Pro ₹699/month, Business ₹1,799/month, with lower prices when billed yearly. Static QR codes are free forever.
+- [QR Sugi pricing](https://milind1248.github.io/qrforge/pricing.html): QR Sugi plans start free. Starter ₹249/month, Pro ₹699/month, Business ₹1,799/month, with lower prices when billed yearly. Static QR codes are free forever.
 
 ## Optional
 - [FAQ](https://milind1248.github.io/qrforge/faq.html)

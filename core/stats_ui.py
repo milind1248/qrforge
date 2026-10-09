@@ -1,4 +1,4 @@
-"""Sidebar 'Live on QRForge' panel: visitors, QR codes created, creators leaderboard. Self-contained card styling that never exceeds the sidebar width."""
+"""Sidebar 'Live on QR Sugi' panel: visitors, QR codes created, creators leaderboard. Self-contained card styling that never exceeds the sidebar width."""
 import html
 
 import streamlit as st
@@ -59,7 +59,7 @@ def panel():
         cols += f"<div class='lb-col'>{val}<div class='lb-bar' style='height:{h}px;background:{_BARS[i % 7]};animation-delay:{i * 0.08:.2f}s;{glow}'></div></div>"
         labels += f"<div class='lb-day{' today' if i == last else ''}'><b>{d['label']}</b>{html.escape(wd[d['wd']])}</div>"
     st.markdown(
-        _CSS + f"<div class='lb'><div class='lb-top'><div class='lb-head'><span class='lb-dot'></span>{html.escape(_('Live on QRForge'))}</div>"
+        _CSS + f"<div class='lb'><div class='lb-top'><div class='lb-head'><span class='lb-dot'></span>{html.escape(_('Live on QR Sugi'))}</div>"
         f"<div class='lb-tiles'><div class='lb-tile'><b>{_fmt(s['visits'])}</b><span>{html.escape(_('Visitors'))}</span></div>"
         f"<div class='lb-tile'><b>{_fmt(s['today'])}</b><span>{html.escape(_('Today'))}</span></div>"
         f"<div class='lb-tile'><b>{_fmt(s['created'])}</b><span>{html.escape(_('QR codes created'))}</span></div></div></div>"

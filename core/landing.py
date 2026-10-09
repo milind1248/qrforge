@@ -135,5 +135,5 @@ def handle(code: str):
                 db.add_report(qr["id"], reason, note)
                 st.success("Thanks. Our team will review this code.")
         if free_owner:
-            st.caption("Created with QRForge. Make your own QR codes free.")
+            st.caption("Created with QR Sugi. Make your own QR codes free.")
     st.stop()

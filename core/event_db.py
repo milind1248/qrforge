@@ -226,7 +226,7 @@ def team(eid: int) -> list[dict]:
 def add_team_member(eid: int, email: str) -> str | None:
     u = db.get_user_by_email(email or "")
     if not u:
-        return "No QRForge account uses that email. Ask them to sign up first."
+        return "No QR Sugi account uses that email. Ask them to sign up first."
     ev = get_event(eid)
     if u["id"] == ev["owner_id"] or _one("SELECT 1 FROM event_team WHERE event_id=? AND user_id=?", (eid, u["id"])):
         return "That person already has access."

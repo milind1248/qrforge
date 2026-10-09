@@ -97,7 +97,7 @@ def footer():
     b64 = base64.b64encode((ROOT / "assets" / "sugi_logo.png").read_bytes()).decode()
     st.markdown(
         f'<div class="footer"><img src="data:image/png;base64,{b64}" width="84" style="display:block;margin:0 auto .4rem"/>'
-        'QRForge · a Sugi product · Digital products made simple<br>Create, track and manage QR codes · Made in India</div>',
+        'QR Sugi · a Sugi product · Digital products made simple<br>Create, track and manage QR codes · Made in India</div>',
         unsafe_allow_html=True)
 
 

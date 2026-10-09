@@ -6,7 +6,7 @@ import urllib.error
 import urllib.request
 from urllib.parse import urlparse
 
-UA = "QRForge-HealthCheck/1.0"
+UA = "QR Sugi-HealthCheck/1.0"
 
 
 def _public_host(url: str) -> bool:

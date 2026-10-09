@@ -171,7 +171,7 @@ def pass_image(ev: dict, b: dict) -> Image.Image:
     d.text(((PASS_W - d.textlength(ref, font=f_ref)) / 2, y), ref, font=f_ref, fill=INK)
     d.text(((PASS_W - d.textlength("BOOKING ID", font=_font(22, True))) / 2, y + 70), "BOOKING ID", font=_font(22, True), fill=MUTED)
     d.rectangle([0, PASS_H - 70, PASS_W, PASS_H], fill=(241, 245, 249))
-    foot = "Show this QR at the entrance  |  One entry per pass  |  Powered by QRForge"
+    foot = "Show this QR at the entrance  |  One entry per pass  |  Powered by QR Sugi"
     d.text(((PASS_W - d.textlength(foot, font=_font(24))) / 2, PASS_H - 48), foot, font=_font(24), fill=MUTED)
     return im
 
@@ -197,7 +197,7 @@ def ics_text(ev: dict, b: dict | None = None) -> str:
         return str(s or "").replace("\\", "\\\\").replace(";", "\\;").replace(",", "\\,").replace("\n", "\\n")
     desc = (ev.get("description") or "")[:500] + (f"\nBooking ID: {b['ref']}" if b else "")
     uid = f"{ev['code']}-{(b or {}).get('ref', 'event')}@qrforge"
-    return "\r\n".join(["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//QRForge//Events//EN", "BEGIN:VEVENT", f"UID:{uid}", f"DTSTAMP:{z(E.now_ist())}",
+    return "\r\n".join(["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//QR Sugi//Events//EN", "BEGIN:VEVENT", f"UID:{uid}", f"DTSTAMP:{z(E.now_ist())}",
                         f"DTSTART:{z(E.event_start(ev))}", f"DTEND:{z(E.event_end(ev))}", f"SUMMARY:{esc(ev['name'])}", f"LOCATION:{esc(ev['venue'])}",
                         f"DESCRIPTION:{esc(desc)}", "END:VEVENT", "END:VCALENDAR", ""])
 

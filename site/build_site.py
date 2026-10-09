@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parent
 OUT = ROOT / "public"
 SITE_URL = os.environ.get("SITE_URL", "https://milind1248.github.io/qrforge").rstrip("/")
 APP_URL = os.environ.get("APP_URL", "https://qrcodescan.streamlit.app").rstrip("/")
-BRAND = "QRForge"
+BRAND = "QR Sugi"
 TODAY = date.today().isoformat()
 E = html.escape
 
@@ -28,21 +28,21 @@ PLANS = [("Free", "₹0", "Unlimited static QR codes, 2 dynamic QR codes, 7-day 
 # ----------------------------------------------------------------------------------------------- page content
 PAGES = {
     "free-qr-code-generator": dict(
-        title="Free QR Code Generator India: No Signup, No Expiry | QRForge",
+        title="Free QR Code Generator India: No Signup, No Expiry | QR Sugi",
         desc="Make a QR code free in seconds: website, text, Wi-Fi, contact card, WhatsApp, UPI. Static QR codes never expire. Custom colours and PNG download. No signup.",
         h1="Free QR code generator for India",
-        intro="QRForge is a free QR code generator. Pick what the code should do, type the details, and download a QR code that works on any phone camera. Static QR codes are free forever, never expire, and do not depend on our servers.",
+        intro="QR Sugi is a free QR code generator. Pick what the code should do, type the details, and download a QR code that works on any phone camera. Static QR codes are free forever, never expire, and do not depend on our servers.",
         sections=[
             ("What you can create", "<ul><li>Website link (URL) QR codes</li><li>Plain text and contact card (vCard) QR codes</li><li>Wi-Fi QR codes that connect guests without typing the password</li><li>WhatsApp chat, SMS, phone call and email QR codes</li><li>UPI payment QR codes with your UPI ID and optional amount</li><li>Location (Google Maps) and calendar event QR codes</li></ul>"),
-            ("How to make a QR code in 3 steps", "<ol><li>Open the <a href=\"{app}\">QRForge generator</a> and choose the QR type.</li><li>Enter your link or details. The preview updates as you type.</li><li>Choose colours and download the PNG. Paid plans add SVG, PDF and your logo.</li></ol>"),
+            ("How to make a QR code in 3 steps", "<ol><li>Open the <a href=\"{app}\">QR Sugi generator</a> and choose the QR type.</li><li>Enter your link or details. The preview updates as you type.</li><li>Choose colours and download the PNG. Paid plans add SVG, PDF and your logo.</li></ol>"),
             ("Static or dynamic?", "<p>A <strong>static</strong> QR code stores the data inside the pattern itself, so it keeps working forever and even if our website is offline. A <strong>dynamic</strong> QR code points to a short link that you can edit later and that records scans. Read more in <a href=\"dynamic-qr-code-generator.html\">dynamic QR codes</a>.</p>"),
-            ("Test before you print", "<p>QRForge includes a scan reliability test that simulates blur, small size, noise and tilt, and tells you the minimum print size for the distance people will scan from.</p>"),
+            ("Test before you print", "<p>QR Sugi includes a scan reliability test that simulates blur, small size, noise and tilt, and tells you the minimum print size for the distance people will scan from.</p>"),
         ],
-        faqs=[("Is the QR code generator really free?", "Yes. Creating and downloading static QR codes is free with no signup. Free downloads carry a small QRForge watermark; paid plans remove it."),
+        faqs=[("Is the QR code generator really free?", "Yes. Creating and downloading static QR codes is free with no signup. Free downloads carry a small QR Sugi watermark; paid plans remove it."),
               ("Do free QR codes expire?", "No. Static QR codes never expire because the information is stored in the code itself."),
               ("Do I need an account?", "No account is needed to create and download a static QR code. An account lets you save codes and create dynamic ones.")]),
     "upi-qr-code-generator": dict(
-        title="UPI QR Code Generator: Free Payment QR for Any UPI ID | QRForge",
+        title="UPI QR Code Generator: Free Payment QR for Any UPI ID | QR Sugi",
         desc="Create a UPI payment QR code for your shop, invoice or table. Enter your UPI ID, payee name and optional amount. Works with PhonePe, Google Pay, Paytm and BHIM.",
         h1="UPI QR code generator",
         intro="A UPI QR code lets customers pay you by scanning with any UPI app, including PhonePe, Google Pay, Paytm and BHIM. Enter your UPI ID and name, add an amount if it is fixed, and download the code.",
@@ -54,9 +54,9 @@ PAGES = {
         ],
         faqs=[("Does a UPI QR code work with all UPI apps?", "Yes. It uses the standard UPI payment link that PhonePe, Google Pay, Paytm, BHIM and bank apps understand."),
               ("Can I set a fixed amount?", "Yes. Add an amount to pre-fill it, or leave it empty so the customer enters the amount."),
-              ("Is there any fee?", "QRForge does not charge for the code and does not touch your money. Payments go directly to your UPI ID.")]),
+              ("Is there any fee?", "QR Sugi does not charge for the code and does not touch your money. Payments go directly to your UPI ID.")]),
     "whatsapp-qr-code-generator": dict(
-        title="WhatsApp QR Code Generator: Chat Link with Message | QRForge",
+        title="WhatsApp QR Code Generator: Chat Link with Message | QR Sugi",
         desc="Create a WhatsApp QR code that opens a chat with your number and a pre-filled message. Free, no signup, great for shops, enquiries and orders.",
         h1="WhatsApp QR code generator",
         intro="A WhatsApp QR code opens a chat with your number as soon as someone scans it, optionally with a message already typed. Customers do not need to save your number.",
@@ -68,7 +68,7 @@ PAGES = {
         faqs=[("Which number format should I use?", "Use the full number with country code and no plus sign or spaces, for example 919876543210."),
               ("Can I pre-fill the message?", "Yes. The message you add appears in the chat box ready to send.")]),
     "wifi-qr-code-generator": dict(
-        title="Wi-Fi QR Code Generator: Share Wi-Fi Without Typing | QRForge",
+        title="Wi-Fi QR Code Generator: Share Wi-Fi Without Typing | QR Sugi",
         desc="Create a Wi-Fi QR code so guests join your network by scanning. Supports WPA/WPA2, WEP and open networks, including hidden SSIDs. Free, no signup.",
         h1="Wi-Fi QR code generator",
         intro="A Wi-Fi QR code connects a phone to your network when scanned. Guests in homes, cafes, offices and hotels never have to read out or type a long password.",
@@ -80,7 +80,7 @@ PAGES = {
         faqs=[("Does it work on iPhone and Android?", "Yes. Both read Wi-Fi QR codes with the built-in camera app."),
               ("What if I change the Wi-Fi password?", "Make a new code. A static Wi-Fi code contains the old password.")]),
     "vcard-qr-code-generator": dict(
-        title="vCard QR Code Generator: Digital Business Card QR | QRForge",
+        title="vCard QR Code Generator: Digital Business Card QR | QR Sugi",
         desc="Make a contact card QR code with your name, phone, email, company and address. Scanners can save you to their phone in one tap. Free and static.",
         h1="vCard QR code generator (contact card)",
         intro="A contact card QR code stores your details in the standard vCard format. When someone scans it, their phone offers to save your contact, so your name, number, email, company and website are added without typing.",
@@ -92,23 +92,23 @@ PAGES = {
         faqs=[("Does it expire?", "No. The details are inside the code, so it works forever. To change details later, make a new code."),
               ("Can I add my logo?", "Yes, on Starter and higher plans you can add a logo in the centre.")]),
     "dynamic-qr-code-generator": dict(
-        title="Dynamic QR Code Generator with Scan Analytics | QRForge",
+        title="Dynamic QR Code Generator with Scan Analytics | QR Sugi",
         desc="Create editable dynamic QR codes: change the destination after printing, pause codes, and track scans by day, device and browser. Free plan includes 2.",
         h1="Dynamic QR code generator with analytics",
-        intro="A dynamic QR code points to a short QRForge link that redirects to your destination. The printed code never changes, but you can change where it goes at any time and see how many people scanned it.",
+        intro="A dynamic QR code points to a short QR Sugi link that redirects to your destination. The printed code never changes, but you can change where it goes at any time and see how many people scanned it.",
         sections=[
             ("What dynamic codes add", "<ul><li>Edit the destination without reprinting</li><li>Pause or resume a code</li><li>Scan history by date, device, operating system and browser</li><li>Destination safety score and link health checks</li><li>On higher plans: smart rules by device or schedule, password protection and A/B destinations</li></ul>"),
             ("Never-dead promise", "<p>If you cancel a paid plan or reach a limit, your printed dynamic codes keep redirecting to the base destination. Premium rules pause, but the code does not die.</p>"),
-            ("Important to know", "<p>Dynamic codes depend on the QRForge redirect being online. For information that should work forever with no dependency, such as Wi-Fi or a contact card, use a <a href=\"free-qr-code-generator.html\">static QR code</a>.</p>"),
+            ("Important to know", "<p>Dynamic codes depend on the QR Sugi redirect being online. For information that should work forever with no dependency, such as Wi-Fi or a contact card, use a <a href=\"free-qr-code-generator.html\">static QR code</a>.</p>"),
             ("Plans", "<p>The free plan includes 2 dynamic QR codes. See <a href=\"pricing.html\">pricing</a>.</p>"),
         ],
         faqs=[("What is the difference between static and dynamic QR codes?", "A static code holds the data itself and never changes. A dynamic code holds a short link, so you can edit the destination and track scans."),
               ("Can I track how many people scanned my QR code?", "Yes, dynamic codes record scans with date, device, operating system and browser. Visitor IP addresses are not stored.")]),
     "event-registration-qr-code": dict(
-        title="Event Registration & QR Code Entry Pass Software | QRForge",
+        title="Event Registration & QR Code Entry Pass Software | QR Sugi",
         desc="Create an event, take free or UPI-paid bookings, email each guest a QR pass, scan entries at the gate with a phone, and export attendance to Excel.",
         h1="Event registration with QR code passes",
-        intro="QRForge Events lets you create an event, collect bookings, give every attendee a unique QR pass, and check people in at the door with a phone camera. The organizer dashboard shows live attendance and exports to Excel.",
+        intro="QR Sugi Events lets you create an event, collect bookings, give every attendee a unique QR pass, and check people in at the door with a phone camera. The organizer dashboard shows live attendance and exports to Excel.",
         sections=[
             ("How it works", "<ol><li>Create the event with name, venue, date, time, capacity and registration deadline. Choose free or paid (UPI, you approve each payment).</li><li>Share the booking link. Attendees enter their details and receive a QR pass by email, which they can also download as PNG or PDF, print, or send on WhatsApp.</li><li>At the gate, staff open the scanner link with a PIN and scan passes. The result is clear: valid, already used, cancelled or invalid.</li><li>Open the dashboard to see registrations and live attendance, search by name, email, booking ID or status, and export the attendee list or check-in records to Excel.</li></ol>"),
             ("Features", "<ul><li>Capacity limits that cannot be exceeded, even when many people book at once</li><li>One check-in per pass, even if two phones scan at the same instant</li><li>Attendee self-cancellation with confirmation, and organizer add or cancel for anyone</li><li>Co-organizers and a staff PIN for volunteers</li><li>Booking pages and passes in English, Hindi and Marathi</li></ul>"),
@@ -116,9 +116,9 @@ PAGES = {
         ],
         faqs=[("Can I sell tickets?", "Yes. Paid events show your UPI QR with the amount. The attendee enters the transaction ID and you approve the payment, after which the pass is emailed."),
               ("Can attendees cancel?", "Yes. Every pass has a cancel link that asks for confirmation. The seat is released and the cancellation appears in your report."),
-              ("What happens if the internet is down at the gate?", "Scanning needs the QRForge site. Keep an Excel export of the attendee list as a backup and use the booking ID to check people in manually.")]),
+              ("What happens if the internet is down at the gate?", "Scanning needs the QR Sugi site. Keep an Excel export of the attendee list as a backup and use the booking ID to check people in manually.")]),
     "restaurant-menu-qr-code": dict(
-        title="Restaurant Menu QR Code Generator: Contactless Menu | QRForge",
+        title="Restaurant Menu QR Code Generator: Contactless Menu | QR Sugi",
         desc="Create a QR code for your restaurant menu, UPI table payment and review link. Update the menu link without reprinting table cards with a dynamic QR.",
         h1="QR codes for restaurants and cafes",
         intro="A menu QR code lets guests open your menu on their own phone, pay by UPI and leave a review, without handing out printed menus. Use a dynamic QR code so you can change the menu link without reprinting table cards.",
@@ -130,9 +130,9 @@ PAGES = {
         faqs=[("Can I change the menu later?", "Yes, with a dynamic QR code you edit the destination and the printed code keeps working."),
               ("Can guests scan in low light?", "Choose a high-contrast colour pair and a larger print size. The scan test warns you about low contrast.")]),
     "pricing": dict(
-        title="QRForge Pricing in Rupees: Free, Starter, Pro, Business",
-        desc="QRForge plans start free. Starter ₹249/month, Pro ₹699/month, Business ₹1,799/month, with lower prices when billed yearly. Static QR codes are free forever.",
-        h1="QRForge pricing",
+        title="QR Sugi Pricing in Rupees: Free, Starter, Pro, Business",
+        desc="QR Sugi plans start free. Starter ₹249/month, Pro ₹699/month, Business ₹1,799/month, with lower prices when billed yearly. Static QR codes are free forever.",
+        h1="QR Sugi pricing",
         intro="Static QR codes are free forever on every plan. Paid plans add more dynamic QR codes, longer analytics, your logo, more formats, bulk generation and larger events. Prices are in Indian rupees.",
         sections=[("Plans", "<ul>" + "".join(f"<li><strong>{n}</strong> — {p}. {d}.</li>" for n, p, d in PLANS) + "</ul>"),
                   ("Payment", "<p>You pay by UPI and submit the payment details; the plan is activated after the payment is verified, usually within a day.</p>"),
@@ -147,11 +147,11 @@ NAV_LABEL = {"free-qr-code-generator": "Free QR generator", "upi-qr-code-generat
              "event-registration-qr-code": "Event passes", "restaurant-menu-qr-code": "Restaurant menu QR", "pricing": "Pricing"}
 
 HOME_FAQ = [
-    ("What is QRForge?", "QRForge is a free QR code generator made for India. It creates static and dynamic QR codes for websites, UPI payments, WhatsApp, Wi-Fi and contact cards, and includes event registration with QR passes and gate scanning."),
-    ("Is QRForge free?", "Yes. Static QR codes are free forever with no signup. Paid plans start at ₹249 per month and add more dynamic codes, analytics, logos, bulk generation and larger events."),
-    ("Do QR codes made with QRForge expire?", "Static QR codes never expire. Dynamic QR codes keep redirecting even if you cancel a paid plan."),
+    ("What is QR Sugi?", "QR Sugi is a free QR code generator made for India. It creates static and dynamic QR codes for websites, UPI payments, WhatsApp, Wi-Fi and contact cards, and includes event registration with QR passes and gate scanning."),
+    ("Is QR Sugi free?", "Yes. Static QR codes are free forever with no signup. Paid plans start at ₹249 per month and add more dynamic codes, analytics, logos, bulk generation and larger events."),
+    ("Do QR codes made with QR Sugi expire?", "Static QR codes never expire. Dynamic QR codes keep redirecting even if you cancel a paid plan."),
     ("Which languages does the website support?", "English, Hindi (हिन्दी) and Marathi (मराठी)."),
-    ("Can I use QRForge for event entry?", "Yes. QRForge Events creates a QR pass for every booking, scans passes with a phone camera, shows live attendance and exports Excel reports."),
+    ("Can I use QR Sugi for event entry?", "Yes. QR Sugi Events creates a QR pass for every booking, scans passes with a phone camera, shows live attendance and exports Excel reports."),
 ]
 
 CSS = """*{box-sizing:border-box}body{margin:0;font:16px/1.65 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#0f172a;background:#f8fafc}
@@ -201,7 +201,7 @@ def layout(path, title, desc, body, ld="", lang="en", alternates=None, og_type="
 <meta property="og:url" content="{url}"><meta property="og:image" content="{SITE_URL}/og-image.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{E(title)}"><meta name="twitter:description" content="{E(desc)}"><meta name="twitter:image" content="{SITE_URL}/og-image.png">
 <link rel="icon" href="{SITE_URL}/favicon.png"><style>{CSS}</style>{ld}</head><body>
-<header><div class="w"><nav><a class="logo" href="{SITE_URL}/">QRForge</a>{links}<a href="{SITE_URL}/faq.html">FAQ</a><a href="{SITE_URL}/hi/">हिन्दी</a><a href="{SITE_URL}/mr/">मराठी</a></nav></div></header>
+<header><div class="w"><nav><a class="logo" href="{SITE_URL}/">QR Sugi</a>{links}<a href="{SITE_URL}/faq.html">FAQ</a><a href="{SITE_URL}/hi/">हिन्दी</a><a href="{SITE_URL}/mr/">मराठी</a></nav></div></header>
 <main class="w">{body}</main>
 <footer><div class="w" style="padding:22px 20px"><p><strong>{BRAND}</strong> — free QR code generator for India. Static QR codes are free forever. <a href="{APP_URL}">Open the generator</a> · <a href="{SITE_URL}/faq.html">FAQ</a> · <a href="{SITE_URL}/llms.txt">llms.txt</a> · <a href="{SITE_URL}/sitemap.xml">Sitemap</a></p></div></footer>
 </body></html>"""
@@ -226,23 +226,23 @@ def build_page(slug, d):
 
 
 HI_HOME = dict(
-    lang="hi", path="hi/index.html", title="मुफ़्त QR कोड जनरेटर: UPI, व्हाट्सऐप, Wi-Fi, इवेंट पास | QRForge",
+    lang="hi", path="hi/index.html", title="मुफ़्त QR कोड जनरेटर: UPI, व्हाट्सऐप, Wi-Fi, इवेंट पास | QR Sugi",
     desc="मुफ़्त QR कोड बनाएँ: वेबसाइट, UPI भुगतान, व्हाट्सऐप, Wi-Fi, संपर्क कार्ड। स्टैटिक QR कभी एक्सपायर नहीं होते। इवेंट रजिस्ट्रेशन और QR एंट्री पास भी।",
-    h1="भारत के लिए मुफ़्त QR कोड जनरेटर", intro="QRForge से आप वेबसाइट, UPI भुगतान, व्हाट्सऐप चैट, Wi-Fi और संपर्क कार्ड के QR कोड मुफ़्त बना सकते हैं। स्टैटिक QR कोड हमेशा मुफ़्त हैं और कभी एक्सपायर नहीं होते। वेबसाइट हिन्दी, मराठी और अंग्रेज़ी में उपलब्ध है।",
+    h1="भारत के लिए मुफ़्त QR कोड जनरेटर", intro="QR Sugi से आप वेबसाइट, UPI भुगतान, व्हाट्सऐप चैट, Wi-Fi और संपर्क कार्ड के QR कोड मुफ़्त बना सकते हैं। स्टैटिक QR कोड हमेशा मुफ़्त हैं और कभी एक्सपायर नहीं होते। वेबसाइट हिन्दी, मराठी और अंग्रेज़ी में उपलब्ध है।",
     cards=[("UPI QR कोड", "अपनी UPI आईडी से भुगतान QR बनाएँ। PhonePe, Google Pay, Paytm सब में चलता है।"), ("व्हाट्सऐप QR", "स्कैन करते ही आपके नंबर पर चैट खुले, पहले से लिखे संदेश के साथ।"),
            ("Wi-Fi QR", "मेहमान बिना पासवर्ड टाइप किए नेटवर्क से जुड़ें।"), ("डायनामिक QR", "प्रिंट के बाद भी लिंक बदलें और स्कैन ट्रैक करें।"),
            ("इवेंट पास", "हर बुकिंग का अपना QR पास, गेट पर फ़ोन से स्कैन और Excel रिपोर्ट।"), ("मुफ़्त और सुरक्षित", "स्टैटिक कोड हमेशा मुफ़्त, कोई साइनअप ज़रूरी नहीं।")],
-    faqs=[("क्या QRForge मुफ़्त है?", "हाँ। स्टैटिक QR कोड बिना साइनअप हमेशा मुफ़्त हैं। पेड प्लान ₹249 प्रति माह से शुरू होते हैं।"),
+    faqs=[("क्या QR Sugi मुफ़्त है?", "हाँ। स्टैटिक QR कोड बिना साइनअप हमेशा मुफ़्त हैं। पेड प्लान ₹249 प्रति माह से शुरू होते हैं।"),
           ("क्या मेरा QR कोड एक्सपायर होगा?", "स्टैटिक QR कोड कभी एक्सपायर नहीं होते। डायनामिक QR कोड प्लान रद्द करने के बाद भी चलते रहते हैं।"),
           ("UPI QR कैसे बनाएँ?", "जनरेटर खोलें, 'UPI भुगतान' चुनें, अपनी UPI आईडी और नाम लिखें, फिर PNG डाउनलोड करें।")], cta="मुफ़्त QR कोड बनाएँ")
 MR_HOME = dict(
-    lang="mr", path="mr/index.html", title="मोफत QR कोड जनरेटर: UPI, व्हॉट्सॲप, Wi-Fi, इव्हेंट पास | QRForge",
+    lang="mr", path="mr/index.html", title="मोफत QR कोड जनरेटर: UPI, व्हॉट्सॲप, Wi-Fi, इव्हेंट पास | QR Sugi",
     desc="मोफत QR कोड बनवा: वेबसाइट, UPI पेमेंट, व्हॉट्सॲप, Wi-Fi, संपर्क कार्ड. स्टॅटिक QR कधीच संपत नाहीत. इव्हेंट नोंदणी आणि QR प्रवेश पासही.",
-    h1="भारतासाठी मोफत QR कोड जनरेटर", intro="QRForge वर तुम्ही वेबसाइट, UPI पेमेंट, व्हॉट्सॲप चॅट, Wi-Fi आणि संपर्क कार्डचे QR कोड मोफत बनवू शकता. स्टॅटिक QR कोड कायम मोफत आहेत आणि कधीच संपत नाहीत. वेबसाइट मराठी, हिन्दी आणि इंग्रजीत उपलब्ध आहे.",
+    h1="भारतासाठी मोफत QR कोड जनरेटर", intro="QR Sugi वर तुम्ही वेबसाइट, UPI पेमेंट, व्हॉट्सॲप चॅट, Wi-Fi आणि संपर्क कार्डचे QR कोड मोफत बनवू शकता. स्टॅटिक QR कोड कायम मोफत आहेत आणि कधीच संपत नाहीत. वेबसाइट मराठी, हिन्दी आणि इंग्रजीत उपलब्ध आहे.",
     cards=[("UPI QR कोड", "तुमच्या UPI आयडीने पेमेंट QR बनवा. PhonePe, Google Pay, Paytm सर्वांत चालतो."), ("व्हॉट्सॲप QR", "स्कॅन करताच तुमच्या नंबरवर चॅट उघडते, आधी लिहिलेल्या संदेशासह."),
            ("Wi-Fi QR", "पाहुणे पासवर्ड न टाकता नेटवर्कला जोडले जातात."), ("डायनॅमिक QR", "प्रिंटनंतरही लिंक बदला आणि स्कॅन ट्रॅक करा."),
            ("इव्हेंट पास", "प्रत्येक बुकिंगसाठी स्वतंत्र QR पास, गेटवर फोनने स्कॅन आणि Excel रिपोर्ट."), ("मोफत आणि सुरक्षित", "स्टॅटिक कोड कायम मोफत, साइनअपची गरज नाही.")],
-    faqs=[("QRForge मोफत आहे का?", "होय. स्टॅटिक QR कोड साइनअपशिवाय कायम मोफत आहेत. पेड प्लॅन ₹249 प्रति महिन्यापासून सुरू होतात."),
+    faqs=[("QR Sugi मोफत आहे का?", "होय. स्टॅटिक QR कोड साइनअपशिवाय कायम मोफत आहेत. पेड प्लॅन ₹249 प्रति महिन्यापासून सुरू होतात."),
           ("माझा QR कोड संपेल का?", "स्टॅटिक QR कोड कधीच संपत नाहीत. डायनॅमिक QR कोड प्लॅन रद्द केल्यानंतरही चालत राहतात."),
           ("UPI QR कसा बनवायचा?", "जनरेटर उघडा, 'UPI पेमेंट' निवडा, तुमचा UPI आयडी आणि नाव लिहा, मग PNG डाउनलोड करा.")], cta="मोफत QR कोड बनवा")
 
@@ -262,7 +262,7 @@ def build_home():
             f'Static QR codes are free forever, never expire, and need no signup. Available in English, Hindi and Marathi.</p>'
             f'<a class="btn" href="{APP_URL}">Create a QR code free</a><a class="btn alt" href="{SITE_URL}/pricing.html">Pricing</a></section>'
             f"<h2>QR code tools</h2><div class=\"grid\">{cards}</div>"
-            "<h2>Why QRForge</h2><div class=\"grid\">"
+            "<h2>Why QR Sugi</h2><div class=\"grid\">"
             "<div class=\"card\"><h3>Made for India</h3><p>UPI payment QR, WhatsApp chat QR, rupee pricing, Hindi and Marathi.</p></div>"
             "<div class=\"card\"><h3>Never-dead codes</h3><p>Printed dynamic codes keep redirecting even if you cancel or hit a limit.</p></div>"
             "<div class=\"card\"><h3>Scan analytics</h3><p>See scans by day, device, operating system and browser.</p></div>"
@@ -270,7 +270,7 @@ def build_home():
             f"{faq_html(HOME_FAQ)}")
     alts = [("en", SITE_URL + "/"), ("hi", SITE_URL + "/hi/"), ("mr", SITE_URL + "/mr/"), ("x-default", SITE_URL + "/")]
     ld = jsonld(APP_LD, ORG_LD, {"@context": "https://schema.org", "@type": "WebSite", "name": BRAND, "url": SITE_URL + "/"}, faq_ld(HOME_FAQ))
-    return layout("index.html", "QRForge: Free QR Code Generator for India | UPI, WhatsApp, Wi-Fi",
+    return layout("index.html", "QR Sugi: Free QR Code Generator for India | UPI, WhatsApp, Wi-Fi",
                   "Free QR code generator for India: static and dynamic QR codes for websites, UPI, WhatsApp, Wi-Fi and contacts. Event passes, scan analytics. Hindi and Marathi.",
                   body, ld, alternates=alts)
 
@@ -284,8 +284,8 @@ def build_faq():
         if q not in seen:
             seen.add(q)
             faqs.append((q, a))
-    body = f'<section class="hero"><h1>QRForge frequently asked questions</h1><p class="lead">Answers about QR code types, expiry, pricing, UPI and events.</p></section>{faq_html(faqs)}'
-    return layout("faq.html", "QRForge FAQ: QR Code Questions Answered", "Answers about static vs dynamic QR codes, expiry, UPI QR codes, WhatsApp and Wi-Fi codes, event passes and pricing.", body,
+    body = f'<section class="hero"><h1>QR Sugi frequently asked questions</h1><p class="lead">Answers about QR code types, expiry, pricing, UPI and events.</p></section>{faq_html(faqs)}'
+    return layout("faq.html", "QR Sugi FAQ: QR Code Questions Answered", "Answers about static vs dynamic QR codes, expiry, UPI QR codes, WhatsApp and Wi-Fi codes, event passes and pricing.", body,
                   jsonld(APP_LD, faq_ld(faqs), crumbs([("Home", SITE_URL + "/"), ("FAQ", SITE_URL + "/faq.html")])))
 
 
@@ -295,7 +295,7 @@ def llms_txt():
              f"> {BRAND} is a free QR code generator for India. It creates static and dynamic QR codes (website, UPI payment, WhatsApp, Wi-Fi, vCard contact card, SMS, phone, email, location, calendar), "
              "shows scan analytics, and includes event registration with unique QR passes, phone-camera gate scanning and Excel attendance reports. Static QR codes are free forever and never expire. "
              "The site is available in English, Hindi and Marathi. Prices are in Indian rupees.", "",
-             "## Use the tool", f"- [QRForge QR code generator (web app)]({APP_URL}): create, design and download QR codes", "",
+             "## Use the tool", f"- [QR Sugi QR code generator (web app)]({APP_URL}): create, design and download QR codes", "",
              "## Guides"]
     for s in ORDER:
         lines.append(f"- [{PAGES[s]['h1']}]({SITE_URL}/{s}.html): {PAGES[s]['desc']}")
@@ -353,7 +353,7 @@ def og_image():
             except OSError:
                 pass
         return ImageFont.load_default()
-    d.text((70, 90), "QRForge", font=font(84, True), fill="white")
+    d.text((70, 90), "QR Sugi", font=font(84, True), fill="white")
     d.text((70, 215), "Free QR code generator", font=font(52, True), fill="white")
     d.text((70, 285), "for India", font=font(52, True), fill="white")
     d.text((70, 400), "UPI  ·  WhatsApp  ·  Wi-Fi  ·  Dynamic QR", font=font(32), fill=(238, 242, 255))
@@ -381,7 +381,7 @@ def main():
         write(f"{s}.html", build_page(s, PAGES[s]))
     write("hi/index.html", build_localized(HI_HOME))
     write("mr/index.html", build_localized(MR_HOME))
-    write("404.html", layout("404.html", "Page not found | QRForge", "This page does not exist.", f'<section class="hero"><h1>Page not found</h1><p class="lead"><a href="{SITE_URL}/">Go to the QRForge home page</a></p></section>').replace('content="index,follow', 'content="noindex,follow'))
+    write("404.html", layout("404.html", "Page not found | QR Sugi", "This page does not exist.", f'<section class="hero"><h1>Page not found</h1><p class="lead"><a href="{SITE_URL}/">Go to the QR Sugi home page</a></p></section>').replace('content="index,follow', 'content="noindex,follow'))
     write("llms.txt", llms_txt())
     write("llms-full.txt", llms_full())
     write("robots.txt", robots())

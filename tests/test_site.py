@@ -43,5 +43,5 @@ def test_sitemap_robots_llms_and_internal_links():
     robots = (PUB / "robots.txt").read_text(encoding="utf-8")
     assert "Sitemap:" in robots and "GPTBot" in robots and "ClaudeBot" in robots and "Disallow" not in robots
     llms = (PUB / "llms.txt").read_text(encoding="utf-8")
-    assert llms.startswith("# QRForge") and "\n> " in llms and "llms-full.txt" in llms
+    assert llms.startswith("# QR Sugi") and "\n> " in llms and "llms-full.txt" in llms
     assert (PUB / "og-image.png").stat().st_size > 5000

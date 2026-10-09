@@ -6,7 +6,7 @@ import streamlit as st
 
 ROOT = Path(__file__).resolve().parent.parent
 DB_PATH = __import__("pathlib").Path(os.environ["QRFORGE_DB_PATH"]) if os.environ.get("QRFORGE_DB_PATH") else ROOT / "data" / "qrforge.db"
-APP_NAME = "QRForge"
+APP_NAME = "QR Sugi"
 
 
 def _get(key: str, default: str) -> str:

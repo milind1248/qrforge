@@ -135,7 +135,7 @@ def render(data: str, style: dict, watermark: bool = False, box: int = 12) -> Im
             font = ImageFont.truetype("arial.ttf", max(14, strip // 2))
         except OSError:
             font = ImageFont.load_default()
-        txt = "Made with QRForge - free plan"
+        txt = "Made with QR Sugi - free plan"
         tw = d.textlength(txt, font=font)
         d.text(((out.width - tw) / 2, img.height + strip // 6), txt, fill=(100, 116, 139), font=font)
         img = out

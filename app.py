@@ -1,9 +1,9 @@
-"""QRForge - QR code generator SaaS (Streamlit). Run:  streamlit run app.py"""
+"""QR Sugi - QR code generator SaaS (Streamlit). Run:  streamlit run app.py"""
 import html
 
 import streamlit as st
 
-st.set_page_config(page_title="QRForge - Free QR Code Generator India | UPI, WhatsApp, Dynamic QR", page_icon=str(__import__("pathlib").Path(__file__).parent / "assets" / "favicon.png"), layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(page_title="QR Sugi - Free QR Code Generator India | UPI, WhatsApp, Dynamic QR", page_icon=str(__import__("pathlib").Path(__file__).parent / "assets" / "favicon.png"), layout="wide", initial_sidebar_state="expanded")
 
 from core import auth, db, i18n, landing, license, ui  # noqa: E402
 from core.i18n import _  # noqa: E402
@@ -80,7 +80,7 @@ if user:
 
 else:
     with st.sidebar:
-        st.markdown(f"<div style='font-size:15px;line-height:1.5'>👋 <b style='color:#2563EB'>{_('Welcome')}</b> {_('to QRForge')}</div>",
+        st.markdown(f"<div style='font-size:15px;line-height:1.5'>👋 <b style='color:#2563EB'>{_('Welcome')}</b> {_('to QR Sugi')}</div>",
                     unsafe_allow_html=True)
         st.caption(_("Log in to save QR codes, go dynamic and track scans."))
         st.page_link(login, label=_("Log in / Sign up"), icon=":material/login:")

@@ -99,7 +99,7 @@ def _get_pool():
     if _pool is None:
         from psycopg.rows import dict_row
         from psycopg_pool import ConnectionPool
-        def configure(c):  # isolate QRForge in its own schema: never touches other apps' tables in `public`
+        def configure(c):  # isolate QR Sugi in its own schema: never touches other apps' tables in `public`
             c.execute(f"SET search_path TO {PG_SCHEMA}")
             c.commit()
 

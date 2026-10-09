@@ -182,9 +182,9 @@ for q, a in [
      "A static code stores your content directly, so it can never change or be tracked. A dynamic code stores a short link that "
      "redirects to your destination, so you can edit the destination later and see scan analytics."),
     ("Do my static QR codes expire?", "No. Static codes work forever, even if you cancel your account."),
-    ("What happens to my printed codes if I cancel or downgrade?", "They keep working. Premium routing rules pause and visitors see a short QRForge trust page, but your base destination stays live. We never switch a printed code off to force you to pay."),
+    ("What happens to my printed codes if I cancel or downgrade?", "They keep working. Premium routing rules pause and visitors see a short QR Sugi trust page, but your base destination stays live. We never switch a printed code off to force you to pay."),
     ("Can I get a refund?",
-     "No. All payments are final and non-refundable. Here is why: QRForge is a digital service. The moment your payment is "
+     "No. All payments are final and non-refundable. Here is why: QR Sugi is a digital service. The moment your payment is "
      "verified, your plan is activated and the resources behind it are reserved for you (dynamic-link hosting, scan tracking "
      "and analytics storage, and support). That cost is incurred immediately and cannot be recovered, and a digital service "
      "cannot be 'returned' like a physical product. "

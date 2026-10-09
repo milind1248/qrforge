@@ -117,7 +117,7 @@ def downloads(data: str, style: dict, key: str):
     cols = st.columns(len(fmts))
     for c, fmt in zip(cols, fmts):
         blob, mime = qe.export(data, style, fmt, plan.watermark)
-        c.download_button(f"{fmt}", blob, f"qrforge.{fmt.lower()}", mime, key=f"{key}_{fmt}",
+        c.download_button(f"{fmt}", blob, f"qr-sugi.{fmt.lower()}", mime, key=f"{key}_{fmt}",
                           width="stretch", type="primary" if fmt == "PNG" else "secondary", on_click=count_download)
     if len(fmts) < 4:
         lock_note(_("SVG / PDF downloads and watermark-free files need a paid plan."))
