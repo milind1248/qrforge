@@ -22,7 +22,7 @@ _HTML = """
 """
 
 _CSS = """
-.hd { font-family: var(--st-font, sans-serif); background: linear-gradient(135deg,#EEF2FF,#F5F3FF); border: 1px solid #C7D2FE; border-radius: 20px; padding: 12px 14px; max-width: 480px; margin: 0 auto; }
+.hd { font-family: var(--st-font, sans-serif); background: linear-gradient(135deg,#EEF2FF,#F5F3FF); border: 1px solid #C7D2FE; border-radius: 20px; padding: 12px 14px; max-width: 480px; margin: 24px auto 0; }
 .hd-steps { display: flex; gap: 6px; margin-bottom: 8px; }
 .hd-steps span { flex: 1; text-align: center; font-size: 11.5px; font-weight: 600; padding: 5px 4px; border-radius: 999px; border: 1px solid #C7D2FE; color: #64748B; background: #fff; transition: all .3s; white-space: nowrap; }
 .hd-steps span.on { background: #4F46E5; color: #fff; border-color: #4F46E5; }
