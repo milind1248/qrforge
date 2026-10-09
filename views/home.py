@@ -10,6 +10,7 @@ from core import auth, db, qr_engine as qe, safety, scan_test
 from core.config import BASE_URL
 from core.plans import PLANS, get_plan
 from core.i18n import _
+from core.stats import count_download
 from core.ui import footer, hero_split, lock_note
 
 user = auth.current_user()
@@ -117,7 +118,7 @@ def downloads(data: str, style: dict, key: str):
     for c, fmt in zip(cols, fmts):
         blob, mime = qe.export(data, style, fmt, plan.watermark)
         c.download_button(f"{fmt}", blob, f"qrforge.{fmt.lower()}", mime, key=f"{key}_{fmt}",
-                          width="stretch", type="primary" if fmt == "PNG" else "secondary")
+                          width="stretch", type="primary" if fmt == "PNG" else "secondary", on_click=count_download)
     if len(fmts) < 4:
         lock_note(_("SVG / PDF downloads and watermark-free files need a paid plan."))
 

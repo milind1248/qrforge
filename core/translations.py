@@ -119,6 +119,8 @@ HI = {
     "Print this pass": "यह पास प्रिंट करें",
     # ---- staff scanner
     "Staff PIN": "स्टाफ़ पिन", "Lock scanner": "स्कैनर लॉक करें", "No scans yet.": "अभी तक कोई स्कैन नहीं।",
+    "Live on QRForge": "QRForge पर अभी", "Visitors": "विज़िटर", "Today": "आज", "QR codes created": "बनाए गए QR कोड", "Top creators": "शीर्ष निर्माता",
+    "Be the first to save a QR code!": "QR कोड सेव करने वाले पहले बनें!",
 }
 
 MR = {
@@ -239,4 +241,6 @@ MR = {
     "Print this pass": "हा पास प्रिंट करा",
     # ---- staff scanner
     "Staff PIN": "स्टाफ पिन", "Lock scanner": "स्कॅनर लॉक करा", "No scans yet.": "अजून कोणतेही स्कॅन नाहीत.",
+    "Live on QRForge": "QRForge वर आत्ता", "Visitors": "भेट देणारे", "Today": "आज", "QR codes created": "बनवलेले QR कोड", "Top creators": "आघाडीचे निर्माते",
+    "Be the first to save a QR code!": "QR कोड सेव्ह करणारे पहिले व्हा!",
 }

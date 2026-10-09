@@ -21,6 +21,8 @@ def _init_db_once():
 _init_db_once()
 ui.inject_css()
 i18n.init()
+from core import stats, stats_ui  # noqa: E402
+stats.count_visit()
 
 
 if code := st.query_params.get("r"):
@@ -82,6 +84,9 @@ else:
                     unsafe_allow_html=True)
         st.caption(_("Log in to save QR codes, go dynamic and track scans."))
         st.page_link(login, label=_("Log in / Sign up"), icon=":material/login:")
+
+with st.sidebar:
+    stats_ui.panel()
 
 nav = st.navigation(pages, position="top")
 if user and st.session_state.pop("goto_dash", False):
