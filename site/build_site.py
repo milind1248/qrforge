@@ -395,8 +395,7 @@ def main():
     (OUT / ".nojekyll").write_text("")
     host = SITE_URL.split("://", 1)[1].split("/")[0]
     if "github.io" not in host:
-        (OUT / "CNAME").write_text(host + "
-")          # tells GitHub Pages which custom domain to serve
+        (OUT / "CNAME").write_text(host + chr(10))          # tells GitHub Pages which custom domain to serve
     print(f"built {len(urls)} pages -> {OUT}  (SITE_URL={SITE_URL})")
 
 

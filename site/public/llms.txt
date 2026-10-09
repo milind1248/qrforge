@@ -6,19 +6,19 @@
 - [QRForge QR code generator (web app)](https://qrcodescan.streamlit.app): create, design and download QR codes
 
 ## Guides
-- [Free QR code generator for India](https://milind1248.github.io/qrforge/free-qr-code-generator.html): Make a QR code free in seconds: website, text, Wi-Fi, contact card, WhatsApp, UPI. Static QR codes never expire. Custom colours and PNG download. No signup.
-- [UPI QR code generator](https://milind1248.github.io/qrforge/upi-qr-code-generator.html): Create a UPI payment QR code for your shop, invoice or table. Enter your UPI ID, payee name and optional amount. Works with PhonePe, Google Pay, Paytm and BHIM.
-- [WhatsApp QR code generator](https://milind1248.github.io/qrforge/whatsapp-qr-code-generator.html): Create a WhatsApp QR code that opens a chat with your number and a pre-filled message. Free, no signup, great for shops, enquiries and orders.
-- [Wi-Fi QR code generator](https://milind1248.github.io/qrforge/wifi-qr-code-generator.html): Create a Wi-Fi QR code so guests join your network by scanning. Supports WPA/WPA2, WEP and open networks, including hidden SSIDs. Free, no signup.
-- [vCard QR code generator (contact card)](https://milind1248.github.io/qrforge/vcard-qr-code-generator.html): Make a contact card QR code with your name, phone, email, company and address. Scanners can save you to their phone in one tap. Free and static.
-- [Dynamic QR code generator with analytics](https://milind1248.github.io/qrforge/dynamic-qr-code-generator.html): Create editable dynamic QR codes: change the destination after printing, pause codes, and track scans by day, device and browser. Free plan includes 2.
-- [Event registration with QR code passes](https://milind1248.github.io/qrforge/event-registration-qr-code.html): Create an event, take free or UPI-paid bookings, email each guest a QR pass, scan entries at the gate with a phone, and export attendance to Excel.
-- [QR codes for restaurants and cafes](https://milind1248.github.io/qrforge/restaurant-menu-qr-code.html): Create a QR code for your restaurant menu, UPI table payment and review link. Update the menu link without reprinting table cards with a dynamic QR.
-- [QRForge pricing](https://milind1248.github.io/qrforge/pricing.html): QRForge plans start free. Starter ₹249/month, Pro ₹699/month, Business ₹1,799/month, with lower prices when billed yearly. Static QR codes are free forever.
+- [Free QR code generator for India](https://qrcode.cfer.in/free-qr-code-generator.html): Make a QR code free in seconds: website, text, Wi-Fi, contact card, WhatsApp, UPI. Static QR codes never expire. Custom colours and PNG download. No signup.
+- [UPI QR code generator](https://qrcode.cfer.in/upi-qr-code-generator.html): Create a UPI payment QR code for your shop, invoice or table. Enter your UPI ID, payee name and optional amount. Works with PhonePe, Google Pay, Paytm and BHIM.
+- [WhatsApp QR code generator](https://qrcode.cfer.in/whatsapp-qr-code-generator.html): Create a WhatsApp QR code that opens a chat with your number and a pre-filled message. Free, no signup, great for shops, enquiries and orders.
+- [Wi-Fi QR code generator](https://qrcode.cfer.in/wifi-qr-code-generator.html): Create a Wi-Fi QR code so guests join your network by scanning. Supports WPA/WPA2, WEP and open networks, including hidden SSIDs. Free, no signup.
+- [vCard QR code generator (contact card)](https://qrcode.cfer.in/vcard-qr-code-generator.html): Make a contact card QR code with your name, phone, email, company and address. Scanners can save you to their phone in one tap. Free and static.
+- [Dynamic QR code generator with analytics](https://qrcode.cfer.in/dynamic-qr-code-generator.html): Create editable dynamic QR codes: change the destination after printing, pause codes, and track scans by day, device and browser. Free plan includes 2.
+- [Event registration with QR code passes](https://qrcode.cfer.in/event-registration-qr-code.html): Create an event, take free or UPI-paid bookings, email each guest a QR pass, scan entries at the gate with a phone, and export attendance to Excel.
+- [QR codes for restaurants and cafes](https://qrcode.cfer.in/restaurant-menu-qr-code.html): Create a QR code for your restaurant menu, UPI table payment and review link. Update the menu link without reprinting table cards with a dynamic QR.
+- [QRForge pricing](https://qrcode.cfer.in/pricing.html): QRForge plans start free. Starter ₹249/month, Pro ₹699/month, Business ₹1,799/month, with lower prices when billed yearly. Static QR codes are free forever.
 
 ## Optional
-- [FAQ](https://milind1248.github.io/qrforge/faq.html)
-- [Full content for LLMs](https://milind1248.github.io/qrforge/llms-full.txt)
-- [Hindi](https://milind1248.github.io/qrforge/hi/)
-- [Marathi](https://milind1248.github.io/qrforge/mr/)
-- [Sitemap](https://milind1248.github.io/qrforge/sitemap.xml)
+- [FAQ](https://qrcode.cfer.in/faq.html)
+- [Full content for LLMs](https://qrcode.cfer.in/llms-full.txt)
+- [Hindi](https://qrcode.cfer.in/hi/)
+- [Marathi](https://qrcode.cfer.in/mr/)
+- [Sitemap](https://qrcode.cfer.in/sitemap.xml)

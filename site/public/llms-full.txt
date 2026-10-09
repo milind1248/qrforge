@@ -1,6 +1,6 @@
 # QRForge: full content
 
-Source: https://milind1248.github.io/qrforge/ . App: https://qrcodescan.streamlit.app
+Source: https://qrcode.cfer.in/ . App: https://qrcodescan.streamlit.app
 
 ## Free QR code generator for India
 

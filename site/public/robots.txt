@@ -46,4 +46,4 @@ Allow: /
 User-agent: MistralAI-User
 Allow: /
 
-Sitemap: https://milind1248.github.io/qrforge/sitemap.xml
+Sitemap: https://qrcode.cfer.in/sitemap.xml
