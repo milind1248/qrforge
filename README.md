@@ -18,6 +18,7 @@ The SQLite database is created automatically at `data/qrforge.db`. **The first a
 - Downloads: PNG / JPG / SVG / PDF (gated by plan); free plan gets a watermark
 - **Dynamic QR**: short link `BASE_URL/?r=<code>`; editable destination, pause/resume, scan logging (device, OS, browser)
 - Analytics (plan-limited history, CSV export on Pro), bulk CSV to ZIP generator, QR scanner (image / camera)
+- **Events** (Events page): create events (venue, date/time, capacity, registration deadline, free or UPI-paid), public booking page `?event=<code>`, unique QR pass per booking (PNG / PDF / print / calendar / email / WhatsApp link) at `?pass=<token>`, entrance scanner (live phone camera, booking-ID entry or photo) for staff via `?checkin=<code>` + PIN, atomic check-in with clear results (valid / already used / cancelled / invalid / wrong event / payment pending), organizer + co-organizer dashboard with live attendance, search and filters (name, email, booking ID, status, check-in date/time), payment approval, and Excel exports (full attendee list, actual check-ins, scan log). Plan limits in `core/event_db.py` (`EVENT_LIMITS`). Tests: `python -m pytest tests` (SQLite); add `QRFORGE_TEST_PG=postgresql://user@localhost:PORT/db` to run the same suite on a local Postgres.
 - Auth (bcrypt), plans + checkout (mock gateway, coupons `LAUNCH20`, `WELCOME10`), billing history, admin console (users, MRR, revenue, plan changes)
 
 ## What makes it different (from market research on user complaints)

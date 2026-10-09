@@ -24,6 +24,10 @@ ui.inject_css()
 if code := st.query_params.get("r"):
     landing.handle(code)
 
+if any(k in st.query_params for k in ("event", "pass", "checkin")):
+    from core import event_public
+    event_public.handle_routes()
+
 user = auth.current_user()
 st.logo(str(ROOT / "assets" / "sugi_logo.png"), icon_image=str(ROOT / "assets" / "sugi_logo.png"), size="large")
 
@@ -40,6 +44,7 @@ if user:
             dash,
             st.Page("views/analytics.py", title="Analytics", icon=":material/insights:"),
             st.Page("views/bulk.py", title="Bulk", icon=":material/stacks:"),
+            st.Page("views/events.py", title="Events", icon=":material/confirmation_number:"),
             st.Page("views/billing.py", title="Billing", icon=":material/receipt_long:"),
             st.Page("views/account.py", title="Account", icon=":material/person:"),
         ],

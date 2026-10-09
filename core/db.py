@@ -43,6 +43,29 @@ CREATE TABLE IF NOT EXISTS settings(
 CREATE TABLE IF NOT EXISTS reports(
   id INTEGER PRIMARY KEY AUTOINCREMENT, qr_id INTEGER NOT NULL, reason TEXT, note TEXT,
   status TEXT DEFAULT 'open', created_at TEXT DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE IF NOT EXISTS events(
+  id INTEGER PRIMARY KEY AUTOINCREMENT, owner_id INTEGER NOT NULL, code TEXT UNIQUE NOT NULL,
+  name TEXT NOT NULL, description TEXT, venue TEXT, map_url TEXT,
+  event_date TEXT, start_time TEXT, end_time TEXT,
+  capacity INTEGER DEFAULT 100, reg_deadline TEXT, max_tickets INTEGER DEFAULT 5,
+  is_paid INTEGER DEFAULT 0, price INTEGER DEFAULT 0, upi_id TEXT, upi_name TEXT, pay_note TEXT,
+  collect_phone INTEGER DEFAULT 1, custom_label TEXT, contact_info TEXT,
+  staff_pin TEXT, status TEXT DEFAULT 'open', created_at TEXT DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE IF NOT EXISTS event_team(
+  event_id INTEGER NOT NULL, user_id INTEGER NOT NULL, role TEXT DEFAULT 'organizer',
+  added_at TEXT DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY(event_id, user_id));
+CREATE TABLE IF NOT EXISTS bookings(
+  id INTEGER PRIMARY KEY AUTOINCREMENT, event_id INTEGER NOT NULL, group_id TEXT,
+  ref TEXT UNIQUE NOT NULL, token TEXT UNIQUE NOT NULL,
+  name TEXT NOT NULL, email TEXT NOT NULL, phone TEXT, extra TEXT, status TEXT DEFAULT 'confirmed',
+  amount INTEGER DEFAULT 0, pay_ref TEXT, pay_shot TEXT, pay_mime TEXT, review_note TEXT,
+  checked_in_at TEXT, checked_in_by TEXT, cancelled_at TEXT, created_at TEXT DEFAULT CURRENT_TIMESTAMP);
+CREATE INDEX IF NOT EXISTS ix_bookings_event ON bookings(event_id, status);
+CREATE INDEX IF NOT EXISTS ix_bookings_email ON bookings(event_id, email);
+CREATE TABLE IF NOT EXISTS pass_scans(
+  id INTEGER PRIMARY KEY AUTOINCREMENT, event_id INTEGER NOT NULL, booking_id INTEGER,
+  ts TEXT DEFAULT CURRENT_TIMESTAMP, result TEXT, actor TEXT, detail TEXT);
+CREATE INDEX IF NOT EXISTS ix_pass_scans_event ON pass_scans(event_id, ts);
 """
 
 MIGRATIONS = {  # table -> {column: type}; keeps older local databases working
@@ -63,7 +86,7 @@ def _pg_schema() -> str:
     """Same tables as SCHEMA, in Postgres dialect. Timestamps stay TEXT so the app code is backend-neutral."""
     t = (SCHEMA.replace("INTEGER PRIMARY KEY AUTOINCREMENT", "BIGSERIAL PRIMARY KEY")
          .replace("DEFAULT CURRENT_TIMESTAMP", f"DEFAULT ({PG_TS})"))
-    tables = ["users", "qrcodes", "scans", "payments", "reports", "settings"]
+    tables = ["users", "qrcodes", "scans", "payments", "reports", "settings", "events", "event_team", "bookings", "pass_scans"]
     rls = "".join(f"ALTER TABLE {n} ENABLE ROW LEVEL SECURITY;" for n in tables)  # block the public anon API
     return t + rls
 
@@ -103,7 +126,7 @@ def conn():
         c.close()
 
 
-_PG_TABLES = {"users", "qrcodes", "scans", "payments", "reports", "settings"}
+_PG_TABLES = {"users", "qrcodes", "scans", "payments", "reports", "settings", "events", "event_team", "bookings", "pass_scans"}
 
 
 def _pg_ready(c) -> bool:

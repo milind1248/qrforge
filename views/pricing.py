@@ -170,6 +170,7 @@ rows = {
     "Download formats": ["PNG", "PNG, JPG, SVG", "+ PDF", "+ PDF"],
     "Bulk generator (rows)": ["–", "–", "500", "5,000"],
     "CSV analytics export": ["–", "–", "✓", "✓"],
+    "Event passes: active events / guests each": ["1 / 50", "3 / 300", "20 / 2,000", "100 / 20,000"],
     "API access": ["–", "–", "–", "Soon"],
 }
 import pandas as pd  # noqa: E402

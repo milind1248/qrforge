@@ -7,14 +7,14 @@ import threading
 from email.message import EmailMessage
 
 from core import db
-from core.config import (APP_NAME, BASE_URL, NOTIFY_OWNER_LOGIN, NOTIFY_USER_LOGIN, OWNER_EMAIL, SMTP_HOST, SMTP_PASSWORD,
+from core.config import (NO_EMAIL, APP_NAME, BASE_URL, NOTIFY_OWNER_LOGIN, NOTIFY_USER_LOGIN, OWNER_EMAIL, SMTP_HOST, SMTP_PASSWORD,
                          SMTP_PORT, SMTP_SENDER)
 
 log = logging.getLogger("qrforge.notify")
 
 
 def enabled() -> bool:
-    return bool(SMTP_SENDER and SMTP_PASSWORD)
+    return bool(SMTP_SENDER and SMTP_PASSWORD) and not NO_EMAIL
 
 
 def _send(to: str, subject: str, text: str, body_html: str, attachments=()):
