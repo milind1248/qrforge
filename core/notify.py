@@ -4,6 +4,7 @@ import html
 import logging
 import smtplib
 import threading
+from datetime import datetime
 from email.message import EmailMessage
 
 from core import db
@@ -17,11 +18,13 @@ def enabled() -> bool:
     return bool(SMTP_SENDER and SMTP_PASSWORD) and not NO_EMAIL
 
 
-def _send(to: str, subject: str, text: str, body_html: str, attachments=()):
+def _send(to: str, subject: str, text: str, body_html: str, attachments=(), reply_to: str = "", raise_errors: bool = False):
     msg = EmailMessage()
     msg["From"] = f"{APP_NAME} <{SMTP_SENDER}>"
     msg["To"] = to
     msg["Subject"] = subject
+    if reply_to:
+        msg["Reply-To"] = reply_to
     msg.set_content(text)
     msg.add_alternative(body_html, subtype="html")
     for name, data, mime in attachments:
@@ -34,6 +37,22 @@ def _send(to: str, subject: str, text: str, body_html: str, attachments=()):
             s.send_message(msg)
     except Exception as e:  # noqa: BLE001
         log.warning("email to %s failed: %s", to, e)
+        if raise_errors:
+            raise
+
+
+def send_contact_message(name: str, email: str, subject: str, message: str) -> bool:
+    """Contact-form message to the site owner (Reply-To = the visitor). Sent synchronously so the form can say whether it worked."""
+    if not enabled() or not OWNER_EMAIL:
+        return False
+    rows = [("From", f"{name or '-'} <{email}>"), ("Query", subject), ("Time (UTC)", datetime.utcnow().strftime("%Y-%m-%d %H:%M"))]
+    body = _wrap("New contact message", rows, "<br>".join(html.escape(message).splitlines()) + "<br><br>Reply to this email to answer the sender.")
+    text = "\n".join(f"{k}: {v}" for k, v in rows) + "\n\n" + message
+    try:
+        _send(OWNER_EMAIL, f"[{APP_NAME}] Contact: {subject[:80]}", text, body, reply_to=email, raise_errors=True)
+        return True
+    except Exception:  # noqa: BLE001
+        return False
 
 
 def send_async(to: str, subject: str, text: str, body_html: str, attachments=()):

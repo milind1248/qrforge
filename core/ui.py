@@ -20,6 +20,11 @@ h1, h2, h3 { letter-spacing: -0.02em; }
   background: linear-gradient(90deg,#4F46E5,#7C3AED 55%,#EC4899); -webkit-background-clip: text;
   background-clip: text; color: transparent; }
 .hero p { color:#475569; font-size:1.1rem; max-width: 680px; margin: 0 auto; }
+[data-testid="stSidebarUserContent"] { min-height: calc(100vh - 7rem); display: flex; flex-direction: column; }
+[data-testid="stSidebarUserContent"] > div { flex: 1 1 auto; display: flex; flex-direction: column; }
+[data-testid="stSidebarUserContent"] > div > [data-testid="stVerticalBlock"] { flex: 1 1 auto; }
+[data-testid="stLayoutWrapper"]:has(> .st-key-contact_box) { margin-top: auto; }
+.st-key-contact_box { position: sticky; bottom: 0; z-index: 5; margin-top: auto; padding: 14px 0 8px; background: linear-gradient(0deg,#EEF2FF 72%,rgba(238,242,255,0)); }
 .hero-l { text-align:left; padding: .2rem 0 .2rem; }
 .hero-l h1 { font-size: 2rem; font-weight: 800; line-height: 1.12; margin: 0 0 .5rem;
   background: linear-gradient(90deg,#4F46E5,#7C3AED 55%,#EC4899); -webkit-background-clip: text; background-clip: text; color: transparent; }

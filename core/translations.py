@@ -121,6 +121,13 @@ HI = {
     "Staff PIN": "स्टाफ़ पिन", "Lock scanner": "स्कैनर लॉक करें", "No scans yet.": "अभी तक कोई स्कैन नहीं।",
     "Live on QRForge": "QRForge पर अभी", "Visitors": "विज़िटर", "Today": "आज", "QR codes created": "बनाए गए QR कोड", "QR codes per day": "प्रतिदिन QR कोड", "Last 7 days": "पिछले 7 दिन",
     "Be the first to save a QR code!": "QR कोड सेव करने वाले पहले बनें!",
+    "Contact us": "संपर्क करें", "Questions, feedback or a problem? Write to us and we will reply by email.": "सवाल, सुझाव या कोई समस्या? हमें लिखें, हम ईमेल से जवाब देंगे।",
+    "Your name (optional)": "आपका नाम (वैकल्पिक)", "Your email": "आपका ईमेल", "Your query": "आपका सवाल", "e.g. Help with a dynamic QR code": "जैसे: डायनामिक QR कोड में मदद",
+    "Description": "विवरण", "Send message": "संदेश भेजें", "Enter your query.": "अपना सवाल लिखें।",
+    "Please describe your question in a few words (at least 10 characters).": "कृपया अपना सवाल कुछ शब्दों में बताएँ (कम से कम 10 अक्षर)।",
+    "You have sent several messages recently. Please try again later.": "आपने हाल ही में कई संदेश भेजे हैं। कृपया बाद में कोशिश करें।", "Sending...": "भेजा जा रहा है...",
+    "Sorry, the message could not be sent right now. Please try again later.": "क्षमा करें, संदेश अभी नहीं भेजा जा सका। कृपया बाद में कोशिश करें।",
+    "Thank you! Your message was sent. We will reply to your email.": "धन्यवाद! आपका संदेश भेज दिया गया। हम आपके ईमेल पर जवाब देंगे।",
 }
 
 MR = {
@@ -243,4 +250,11 @@ MR = {
     "Staff PIN": "स्टाफ पिन", "Lock scanner": "स्कॅनर लॉक करा", "No scans yet.": "अजून कोणतेही स्कॅन नाहीत.",
     "Live on QRForge": "QRForge वर आत्ता", "Visitors": "भेट देणारे", "Today": "आज", "QR codes created": "बनवलेले QR कोड", "QR codes per day": "दररोज QR कोड", "Last 7 days": "गेले 7 दिवस",
     "Be the first to save a QR code!": "QR कोड सेव्ह करणारे पहिले व्हा!",
+    "Contact us": "संपर्क करा", "Questions, feedback or a problem? Write to us and we will reply by email.": "प्रश्न, अभिप्राय किंवा अडचण? आम्हाला लिहा, आम्ही ईमेलने उत्तर देऊ.",
+    "Your name (optional)": "तुमचे नाव (ऐच्छिक)", "Your email": "तुमचा ईमेल", "Your query": "तुमचा प्रश्न", "e.g. Help with a dynamic QR code": "उदा. डायनॅमिक QR कोडमध्ये मदत",
+    "Description": "वर्णन", "Send message": "संदेश पाठवा", "Enter your query.": "तुमचा प्रश्न लिहा.",
+    "Please describe your question in a few words (at least 10 characters).": "कृपया तुमचा प्रश्न थोडक्यात सांगा (किमान 10 अक्षरे).",
+    "You have sent several messages recently. Please try again later.": "तुम्ही नुकतेच अनेक संदेश पाठवले आहेत. कृपया नंतर प्रयत्न करा.", "Sending...": "पाठवत आहे...",
+    "Sorry, the message could not be sent right now. Please try again later.": "क्षमस्व, संदेश आत्ता पाठवता आला नाही. कृपया नंतर प्रयत्न करा.",
+    "Thank you! Your message was sent. We will reply to your email.": "धन्यवाद! तुमचा संदेश पाठवला गेला. आम्ही तुमच्या ईमेलवर उत्तर देऊ.",
 }

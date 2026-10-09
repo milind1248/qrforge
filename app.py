@@ -87,6 +87,8 @@ else:
 
 with st.sidebar:
     stats_ui.panel()
+    from core import contact  # noqa: E402
+    contact.sidebar_link()
 
 nav = st.navigation(pages, position="top")
 if user and st.session_state.pop("goto_dash", False):
