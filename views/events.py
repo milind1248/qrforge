@@ -18,7 +18,7 @@ max_events, max_att = E.EVENT_LIMITS.get(plan.key, E.EVENT_LIMITS["free"])
 st.title("Events")
 st.caption("Sell or share free passes, scan guests at the door, and export attendance. Times are in India time (IST).")
 if msg := st.session_state.pop("ev_flash", None):
-    st.success(msg)
+    st.toast(msg, icon=":material/check_circle:", duration="long")      # a toast, not an element: it must not shift the page layout (that resets tabs and selections)
 
 STATUS_LABEL = event_export.STATUS_LABEL
 
@@ -90,7 +90,7 @@ def _df(rows: list[dict]) -> pd.DataFrame:
                           "Status": STATUS_LABEL.get(b["status"], b["status"]), "Paid (Rs)": b["amount"] or 0, "UPI ref": b["pay_ref"] or "",
                           "Checked in": "Yes" if b["checked_in_at"] and b["status"] == "confirmed" else "No",
                           "Check-in time": E.fmt_utc(b["checked_in_at"], "%d %b %Y, %I:%M %p") if b["checked_in_at"] else "",
-                          "Booked": E.fmt_utc(b["created_at"], "%d %b %Y, %I:%M %p")} for b in rows])
+                          "Booked": E.fmt_utc(b["created_at"], "%d %b %Y, %I:%M %p"), "Note": b["review_note"] or ""} for b in rows])
 
 
 def _ci_range(key: str):
@@ -183,12 +183,41 @@ def _actions(picked: list[dict], key: str):
 
 
 # ----------------------------------------------------------------------------- per-event screen
+def add_registration(ev: dict):
+    eid = ev["id"]
+    with st.expander("Add a registration (walk-in, guest, VIP)", icon=":material/person_add:"):
+        st.caption("Add anyone yourself. Works even after registration closes, as long as seats are free. They get their pass by email.")
+        with st.form(f"addreg{eid}", clear_on_submit=True):
+            a, b = st.columns(2)
+            name = a.text_input("Full name", max_chars=80)
+            email = b.text_input("Email (the pass is sent here)", max_chars=120)
+            c, d = st.columns(2)
+            phone = c.text_input("Mobile (optional)", max_chars=20)
+            extra = d.text_input(ev["custom_label"] or "Extra detail (optional)", max_chars=200)
+            comp = False
+            if ev["is_paid"]:
+                comp = st.radio("Payment", [f"Paid already (Rs {ev['price']}, counted in revenue)", "Complimentary (Rs 0)"], horizontal=True).startswith("Compl")
+            send = st.checkbox("Email the pass", value=True)
+            go = st.form_submit_button("Add registration", type="primary")
+        if go:
+            try:
+                made = E.create_bookings(ev, [name], email, phone, extra, by=user["name"], amount=0 if comp else None)
+            except E.BookingError as e:
+                st.error(str(e))
+                return
+            full = [E.get_by_token(m["token"]) for m in made]
+            if send:
+                event_mail.send_passes(ev, full)
+            _flash(f"Added {full[0]['name']} ({full[0]['ref']})." + (" Pass emailed." if send and event_mail.notify.enabled() else ""))
+
+
 def event_screen(ev: dict):
     eid = ev["id"]
     tabs = st.tabs(["Overview", "Attendees", "Check-in", "Reports (Excel)", "Settings"])
     with tabs[0]:
         overview(ev)
     with tabs[1]:
+        add_registration(ev)
         explorer([eid], f"att{eid}")
     with tabs[2]:
         st.caption("Use this on your phone at the entrance. Or share the staff link and PIN so volunteers can scan without an account.")
@@ -320,8 +349,7 @@ with tab_my:
     if not events:
         st.info("You have no events yet. Open the Create event tab to make your first one.", icon=":material/event:")
     else:
-        labels = {e["id"]: f"{e['name']} · {e['event_date']} · {e['confirmed']}/{e['capacity']} booked" + (f" · by {e['owner_name']}" if e["owner_id"] != user["id"] else "")
-                  + ("  [cancelled]" if e["status"] == "cancelled" else "") for e in events}
+        labels = {e["id"]: f"{e['name']} · {e['event_date']}" + (f" · by {e['owner_name']}" if e["owner_id"] != user["id"] else "") for e in events}   # labels must stay constant: they are part of the selectbox identity
         ids = list(labels)
         if (goto := st.session_state.pop("ev_goto", None)) in ids:
             st.session_state["ev_sel"] = goto
@@ -335,11 +363,14 @@ with tab_new:
         st.warning(f"Your {plan.name} plan includes {max_events} active event(s) with up to {max_att:,} attendees each. Cancel an event or upgrade for more.", icon=":material/lock:")
         st.page_link("views/pricing.py", label="See plans", icon=":material/workspace_premium:")
     else:
+        if made := st.session_state.get("ev_created"):
+            st.success(f"Event created: **{made['name']}**. Open the **My events** tab to manage it. Booking link to share: {P.event_url(made['code'])}", icon=":material/check_circle:")
         d = event_form(None, "create_event")
         if d:
             new = E.create_event(user["id"], d)
             st.session_state["ev_goto"] = new["id"]
-            _flash(f"Event created. Share this link: {P.event_url(new['code'])}")
+            st.session_state["ev_created"] = new
+            st.rerun()
 
 with tab_all:
     if not events:

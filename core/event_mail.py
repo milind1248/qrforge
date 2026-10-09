@@ -10,7 +10,7 @@ def _rows(ev: dict, extra: list[tuple[str, str]] | None = None) -> list[tuple[st
 
 
 def _organizer_line(ev: dict) -> str:
-    c = (ev.get("contact_info") or "").strip()
+    c = P.contact_text(ev)
     return f" Questions? Contact the organizer: {html.escape(c)}." if c else ""
 
 
@@ -25,10 +25,12 @@ def send_passes(ev: dict, bookings: list[dict]):
     atts.append(("event.ics", P.ics_text(ev, first).encode("utf-8"), "text/calendar"))
     rows = _rows(ev, [("Booking ID" + ("s" if len(bookings) > 1 else ""), ", ".join(b["ref"] for b in bookings)),
                       ("Attendee" + ("s" if len(bookings) > 1 else ""), ", ".join(b["name"] for b in bookings))])
-    links = "<br>".join(f"<a href='{html.escape(P.pass_url(b['token']))}'>Open pass: {html.escape(b['name'])} ({html.escape(b['ref'])})</a>" for b in bookings)
-    foot = f"Your pass{'es are' if len(bookings) > 1 else ' is'} attached as PDF. Show the QR code at the entrance (on your phone or printed).<br>{links}<br>{_organizer_line(ev)}"
-    text = (f"Your booking for {ev['name']} is confirmed.\n" + "\n".join(f"{b['name']}: {b['ref']} - {P.pass_url(b['token'])}" for b in bookings)
-            + f"\nWhen: {P.nice_date(ev)}\nVenue: {ev['venue']}")
+    links = "<br>".join(f"<a href='{html.escape(P.pass_url(b['token']))}'>Open pass: {html.escape(b['name'])} ({html.escape(b['ref'])})</a>"
+                        f" &middot; <a href='{html.escape(P.cancel_url(b['token']))}'>Cancel this booking</a>" for b in bookings)
+    foot = (f"Your pass{'es are' if len(bookings) > 1 else ' is'} attached as PDF. Show the QR code at the entrance (on your phone or printed).<br>{links}<br>"
+            f"<a href='{html.escape(P.event_url(ev['code']))}'>Event details</a>.{_organizer_line(ev)}")
+    lines = "\n".join(f"{b['name']}: {b['ref']}\n  Pass: {P.pass_url(b['token'])}\n  Cancel: {P.cancel_url(b['token'])}" for b in bookings)
+    text = (f"Your booking for {ev['name']} is confirmed.\n{lines}\nWhen: {P.nice_date(ev)}\nVenue: {ev['venue']}\nEvent details: {P.event_url(ev['code'])}\nOrganizer: {P.contact_text(ev)}")
     notify.send_async(first["email"], f"Your pass for {ev['name']} ({first['ref']})", text, notify._wrap("Booking confirmed", rows, foot), attachments=atts)
 
 
@@ -67,3 +69,11 @@ def send_cancelled(ev: dict, b: dict, why: str = "cancelled"):
     title = "Event cancelled" if why == "event" else "Booking cancelled"
     notify.send_async(b["email"], f"{title}: {ev['name']} ({b['ref']})", f"{title}: {ev['name']} ({b['ref']}).",
                       notify._wrap(title, _rows(ev, [("Booking ID", b["ref"])]), _organizer_line(ev).strip() or "We are sorry for the inconvenience."))
+
+
+def notify_organizer_cancel(ev: dict, owner: dict, b: dict):
+    if not owner or not notify.enabled():
+        return
+    rows = [("Event", ev["name"]), ("Attendee", f"{b['name']} <{b['email']}>"), ("Booking ID", b["ref"]), ("Cancelled by", "the attendee")]
+    notify.send_async(owner["email"], f"[{APP_NAME}] Booking cancelled: {ev['name']} ({b['ref']})", "Booking cancelled by attendee: " + "; ".join(f"{k}: {v}" for k, v in rows),
+                      notify._wrap("An attendee cancelled", rows, "The seat is free again. It also shows as Cancelled in your attendee report."))

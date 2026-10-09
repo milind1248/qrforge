@@ -24,7 +24,7 @@ ui.inject_css()
 if code := st.query_params.get("r"):
     landing.handle(code)
 
-if any(k in st.query_params for k in ("event", "pass", "checkin")):
+if any(k in st.query_params for k in ("event", "pass", "checkin", "cancel")):
     from core import event_public
     event_public.handle_routes()
 

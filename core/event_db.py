@@ -271,7 +271,7 @@ def registration_state(ev: dict) -> tuple[bool, str]:
 
 
 # ----------------------------------------------------------------------------- bookings
-def create_bookings(ev: dict, names: list[str], email: str, phone: str = "", extra: str = "", pay_ref: str = "", pay_shot: str = "", pay_mime: str = "") -> list[dict]:
+def create_bookings(ev: dict, names: list[str], email: str, phone: str = "", extra: str = "", pay_ref: str = "", pay_shot: str = "", pay_mime: str = "", by: str = "", amount: int | None = None) -> list[dict]:
     """Atomically reserves seats (capacity-safe) and returns the created bookings. Free events are confirmed at once;
     paid events wait as 'pending_payment' until the organizer approves the payment."""
     email = (email or "").strip().lower()
@@ -280,12 +280,12 @@ def create_bookings(ev: dict, names: list[str], email: str, phone: str = "", ext
         raise BookingError("Enter the attendee name.")
     if not EMAIL_RE.match(email):
         raise BookingError("Enter a valid email address.")
-    if len(names) > int(ev["max_tickets"]):
+    if len(names) > int(ev["max_tickets"]) and not by:
         raise BookingError(f"You can book up to {ev['max_tickets']} tickets at a time.")
     if any(len(n) > 80 for n in names) or len(email) > 120 or len(phone or "") > 20 or len(extra or "") > 200:
         raise BookingError("One of the fields is too long.")
     paid = bool(ev["is_paid"])
-    if paid and not re.fullmatch(r"[A-Za-z0-9]{6,30}", (pay_ref or "").strip()):
+    if paid and not by and not re.fullmatch(r"[A-Za-z0-9]{6,30}", (pay_ref or "").strip()):
         raise BookingError("Enter the UPI transaction ID (6 to 30 letters or digits) from your payment app.")
     group = _rand(REF_ALPHABET, 8)
     made = []
@@ -295,32 +295,46 @@ def create_bookings(ev: dict, names: list[str], email: str, phone: str = "", ext
         else:
             c.execute("BEGIN IMMEDIATE")
         fresh = _rows(_cur(c, "SELECT * FROM events WHERE id=?", (ev["id"],)))[0]
-        if fresh["status"] != "open":
+        if fresh["status"] == "cancelled" or (fresh["status"] != "open" and not by):
             raise BookingError("Registration for this event is closed.")
-        if now_ist() > deadline_dt(fresh):
+        if now_ist() > deadline_dt(fresh) and not by:
             raise BookingError("The registration deadline has passed.")
         taken = _rows(_cur(c, "SELECT COUNT(*) n FROM bookings WHERE event_id=? AND status IN ('confirmed','pending_payment')", (ev["id"],)))[0]["n"]
         left = fresh["capacity"] - taken
         if left < len(names):
             raise BookingError("Sold out. All seats are taken." if left <= 0 else f"Only {left} seat(s) left. Reduce the number of tickets.")
         dup = _rows(_cur(c, "SELECT 1 x FROM bookings WHERE event_id=? AND LOWER(email)=? AND status IN ('confirmed','pending_payment')", (ev["id"], email)))
-        if dup:
+        if dup and not by:          # organizers may add several people who share one email
             raise BookingError("This email is already registered for this event. Use 'Find my pass' below to get your pass again.")
-        if paid and _rows(_cur(c, "SELECT 1 x FROM bookings WHERE event_id=? AND LOWER(pay_ref)=?", (ev["id"], pay_ref.strip().lower()))):
+        if paid and not by and _rows(_cur(c, "SELECT 1 x FROM bookings WHERE event_id=? AND LOWER(pay_ref)=?", (ev["id"], pay_ref.strip().lower()))):
             raise BookingError("That transaction ID has already been used for this event.")
-        status = "pending_payment" if paid else "confirmed"
+        status = "pending_payment" if paid and not by else "confirmed"
+        note = f"added by {by}"[:200] if by else None
         for n in names:
             for _ in range(8):
                 ref, token = "EVT-" + _rand(REF_ALPHABET, 6), secrets.token_urlsafe(12)
                 if not _rows(_cur(c, "SELECT 1 x FROM bookings WHERE ref=? OR token=?", (ref, token))):
                     break
             args = (ev["id"], group, ref, token, n, email, (phone or "").strip(), (extra or "").strip(), status,
-                    int(ev["price"] or 0) if paid else 0, (pay_ref or "").strip() or None, pay_shot or None, pay_mime or None)
-            sql = ("INSERT INTO bookings(event_id,group_id,ref,token,name,email,phone,extra,status,amount,pay_ref,pay_shot,pay_mime)"
-                   " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)")
+                    (int(amount) if amount is not None else int(ev["price"] or 0) if paid else 0), (pay_ref or "").strip() or None, pay_shot or None, pay_mime or None, note)
+            sql = ("INSERT INTO bookings(event_id,group_id,ref,token,name,email,phone,extra,status,amount,pay_ref,pay_shot,pay_mime,review_note)"
+                   " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
             _cur(c, sql, args)
             made.append({"ref": ref, "token": token, "name": n, "email": email, "status": status, "event_id": ev["id"], "group_id": group})
     return made
+
+
+def attendee_can_cancel(ev: dict, b: dict) -> tuple[bool, str]:
+    """May the attendee cancel through their own link? -> (allowed, reason when not)."""
+    if b["status"] in ("cancelled", "rejected"):
+        return False, "This booking is already cancelled."
+    if b["checked_in_at"]:
+        return False, "You have already checked in, so this booking can no longer be cancelled."
+    if ev["status"] == "cancelled":
+        return False, "This event has been cancelled."
+    if now_ist() > event_end(ev):
+        return False, "This event has ended."
+    return True, ""
 
 
 def get_booking(booking_id: int) -> dict | None:

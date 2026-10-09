@@ -8,7 +8,7 @@ from urllib.parse import quote
 
 from PIL import Image, ImageDraw, ImageFont
 
-from core import event_db as E
+from core import db, event_db as E
 from core.config import BASE_URL
 from core.qr_engine import render as render_qr
 
@@ -24,6 +24,21 @@ def pass_url(token: str) -> str:
 
 def event_url(code: str) -> str:
     return f"{BASE_URL}/?event={code}"
+
+
+def cancel_url(token: str) -> str:
+    return f"{BASE_URL}/?cancel={token}"
+
+
+def organizer_email(ev: dict) -> str:
+    u = db.get_user(ev["owner_id"])
+    return u["email"] if u else ""
+
+
+def contact_text(ev: dict) -> str:
+    """Plain 'who to contact' line: organizer's account email plus the contact detail they typed in."""
+    parts = [organizer_email(ev), (ev.get("contact_info") or "").strip()]
+    return " / ".join(x for x in dict.fromkeys(parts) if x)
 
 
 def staff_url(code: str) -> str:

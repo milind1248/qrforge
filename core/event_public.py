@@ -122,7 +122,7 @@ def _confirmation(ev: dict, tokens: list[str]):
     else:
         st.success(f"You are booked! A confirmation with your pass was sent to {bks[0]['email']}.", icon=":material/check_circle:")
     for i, b in enumerate(bks):
-        event_ui.pass_view(ev, b, f"done_{ev['code']}_{i}", allow_cancel=False)
+        event_ui.pass_view(ev, b, f"done_{ev['code']}_{i}")
     if st.button("Book another seat", key=f"ev_again_{ev['code']}"):
         st.session_state.pop(f"ev_done_{ev['code']}", None)
         st.rerun()
@@ -154,6 +154,39 @@ def pass_page(token: str):
             st.error("This event has been cancelled.")
         event_ui.pass_view(ev, b, "pp")
         st.caption(f"Event page: {P.event_url(ev['code'])}")
+    st.stop()
+
+
+def cancel_page(token: str):
+    b = E.get_by_token(token)
+    if not b:
+        _shell("<div class='card' style='text-align:center'><h3>Booking not found</h3><p>This cancel link is not valid.</p></div>")
+        st.stop()
+    ev = E.get_event(b["event_id"])
+    with _center():
+        st.markdown("### Cancel your registration")
+        st.markdown(f"**{html.escape(ev['name'])}**<br>{html.escape(P.nice_date(ev))}<br>{html.escape(ev['venue'])}<br>"
+                    f"Attendee: **{html.escape(b['name'])}** &nbsp;·&nbsp; Booking ID **{html.escape(b['ref'])}**", unsafe_allow_html=True)
+        ok, why = E.attendee_can_cancel(ev, b)
+        done = st.session_state.get(f"cx_done_{token}")
+        if done:
+            st.success("Your registration is cancelled. The seat was released and your pass no longer works. A confirmation was emailed to you.", icon=":material/check_circle:")
+        elif not ok:
+            st.warning(why, icon=":material/info:")
+        else:
+            st.warning("Are you sure? Your pass and QR code will stop working and the seat goes back to other people. This cannot be undone.", icon=":material/warning:")
+            if ev["is_paid"]:
+                st.caption("Refunds for paid tickets are handled by the organizer.")
+            c1, c2 = st.columns(2)
+            if c1.button("Yes, cancel my registration", type="primary", width="stretch", key=f"cx_yes_{token}"):
+                done_rows = E.cancel([b["id"]], "attendee", "cancelled by attendee")
+                if done_rows:
+                    event_mail.send_cancelled(ev, done_rows[0])
+                    event_mail.notify_organizer_cancel(ev, E.organizer_contact(ev), done_rows[0])
+                st.session_state[f"cx_done_{token}"] = True
+                st.rerun()
+            c2.link_button("No, keep my booking", P.pass_url(token), width="stretch")
+        st.caption(f"Questions? Contact the organizer: {P.contact_text(ev)}" if P.contact_text(ev) else "")
     st.stop()
 
 
@@ -189,6 +222,8 @@ def handle_routes():
     qp = st.query_params
     if t := qp.get("pass"):
         pass_page(str(t))
+    if t := qp.get("cancel"):
+        cancel_page(str(t))
     if c := qp.get("checkin"):
         staff_page(str(c))
     if c := qp.get("event"):

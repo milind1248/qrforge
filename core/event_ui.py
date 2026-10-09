@@ -119,11 +119,10 @@ def pass_view(ev: dict, b: dict, key: str, allow_cancel: bool = True):
         d2.link_button("Share on WhatsApp", P.whatsapp_link("", P.pass_share_text(ev, b)), width="stretch", icon=":material/chat:")
     if b["checked_in_at"]:
         st.success(f"Checked in on {E.fmt_utc(b['checked_in_at'], '%d %b %Y, %I:%M %p')}. Welcome!")
-    elif allow_cancel and not ev["is_paid"] and E.now_ist() < E.event_start(ev):
-        with st.expander("Cancel this booking"):
-            sure = st.checkbox("Yes, cancel my booking. This frees the seat and the pass stops working.", key=f"{key}_sure")
-            if st.button("Cancel booking", key=f"{key}_cancel", disabled=not sure):
-                E.cancel([b["id"]], "attendee", "cancelled by attendee")
-                st.rerun()
-    elif allow_cancel and ev["is_paid"] and not b["checked_in_at"]:
-        st.caption("Paid booking: please contact the organizer to cancel." + (f" ({ev['contact_info']})" if ev.get("contact_info") else ""))
+    st.markdown(f"**Event details:** [{P.event_url(ev['code'])}]({P.event_url(ev['code'])})")
+    if contact := P.contact_text(ev):
+        st.markdown(f"**Organizer contact:** {contact}")
+    if allow_cancel and E.attendee_can_cancel(ev, b)[0]:
+        st.link_button("Cancel this booking", P.cancel_url(b["token"]), icon=":material/event_busy:")
+        if ev["is_paid"]:
+            st.caption("Refunds for paid tickets are handled by the organizer.")
