@@ -2,6 +2,12 @@
 
 Original implementation inspired by the feature set of dynamic-QR products. No third-party code or assets.
 
+## SEO / AI discoverability
+The Streamlit app renders with JavaScript inside an iframe on streamlit.app, which search engines and AI crawlers read poorly. `site/` builds a plain-HTML marketing site
+(keyword landing pages, FAQ, Hindi and Marathi home pages, JSON-LD structured data, sitemap, robots.txt that allows AI crawlers, `llms.txt`, `llms-full.txt`, Open Graph image).
+`python site/build_site.py` regenerates `site/public`; `.github/workflows/pages.yml` publishes it to GitHub Pages (Settings > Pages > Source: GitHub Actions).
+Set `SITE_URL` to your own domain before building when you have one.
+
 ## Licensing
 The app requires `LICENSE_KEY` (Streamlit secret or env var; `[deploy] license_key` also accepted). Without a valid key every page, scan link and the DB layer refuse to run. Only a salted hash of the key is in the code.
 

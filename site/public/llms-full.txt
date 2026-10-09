@@ -1,0 +1,253 @@
+# QRForge: full content
+
+Source: https://milind1248.github.io/qrforge/ . App: https://qrcodescan.streamlit.app
+
+## Free QR code generator for India
+
+QRForge is a free QR code generator. Pick what the code should do, type the details, and download a QR code that works on any phone camera. Static QR codes are free forever, never expire, and do not depend on our servers.
+
+### What you can create
+
+- Website link (URL) QR codes
+- Plain text and contact card (vCard) QR codes
+- Wi-Fi QR codes that connect guests without typing the password
+- WhatsApp chat, SMS, phone call and email QR codes
+- UPI payment QR codes with your UPI ID and optional amount
+- Location (Google Maps) and calendar event QR codes
+
+### How to make a QR code in 3 steps
+
+- Open the QRForge generator and choose the QR type.
+- Enter your link or details. The preview updates as you type.
+- Choose colours and download the PNG. Paid plans add SVG, PDF and your logo.
+
+### Static or dynamic?
+
+A static QR code stores the data inside the pattern itself, so it keeps working forever and even if our website is offline. A dynamic QR code points to a short link that you can edit later and that records scans. Read more in dynamic QR codes.
+
+### Test before you print
+
+QRForge includes a scan reliability test that simulates blur, small size, noise and tilt, and tells you the minimum print size for the distance people will scan from.
+
+### FAQ
+
+**Is the QR code generator really free?** Yes. Creating and downloading static QR codes is free with no signup. Free downloads carry a small QRForge watermark; paid plans remove it.
+**Do free QR codes expire?** No. Static QR codes never expire because the information is stored in the code itself.
+**Do I need an account?** No account is needed to create and download a static QR code. An account lets you save codes and create dynamic ones.
+
+## UPI QR code generator
+
+A UPI QR code lets customers pay you by scanning with any UPI app, including PhonePe, Google Pay, Paytm and BHIM. Enter your UPI ID and name, add an amount if it is fixed, and download the code.
+
+### What goes into a UPI QR code
+
+The code holds a standard upi://pay link with your UPI ID (VPA), payee name, optional amount and an optional note. Because it is a static QR code, it works without any server and never expires.
+
+### Where to use it
+
+- Shop counters and market stalls
+- Restaurant tables and takeaway packaging
+- Invoices, bills and donation boxes
+- Tuition fees, society maintenance and event tickets
+
+### Steps
+
+- Open the generator and select UPI payment.
+- Enter your UPI ID such as shop@bank, the payee name, and an amount if the price is fixed.
+- Download the PNG and print it at least 3 cm wide for counter use. Use the built-in scan test to check it.
+
+### Safety tip
+
+Always scan your own code with a different phone and confirm the payee name shown by the UPI app before you print or share it.
+
+### FAQ
+
+**Does a UPI QR code work with all UPI apps?** Yes. It uses the standard UPI payment link that PhonePe, Google Pay, Paytm, BHIM and bank apps understand.
+**Can I set a fixed amount?** Yes. Add an amount to pre-fill it, or leave it empty so the customer enters the amount.
+**Is there any fee?** QRForge does not charge for the code and does not touch your money. Payments go directly to your UPI ID.
+
+## WhatsApp QR code generator
+
+A WhatsApp QR code opens a chat with your number as soon as someone scans it, optionally with a message already typed. Customers do not need to save your number.
+
+### Good uses
+
+- Take orders and enquiries from a poster or shop window
+- Support and booking requests with a pre-filled message such as "Hi, I want to book"
+- Business cards and brochures
+
+### How to create it
+
+- Open the generator and choose WhatsApp.
+- Enter the number with country code, for example 919876543210 for India.
+- Optionally write the first message, then download the code.
+
+### Tip
+
+Use a dynamic QR code if you may change the number or message later without reprinting. See dynamic QR codes.
+
+### FAQ
+
+**Which number format should I use?** Use the full number with country code and no plus sign or spaces, for example 919876543210.
+**Can I pre-fill the message?** Yes. The message you add appears in the chat box ready to send.
+
+## Wi-Fi QR code generator
+
+A Wi-Fi QR code connects a phone to your network when scanned. Guests in homes, cafes, offices and hotels never have to read out or type a long password.
+
+### What you need
+
+The network name (SSID), the password, and the security type (WPA/WPA2, WEP or none). You can also mark the network as hidden.
+
+### Steps
+
+- Open the generator and choose Wi-Fi.
+- Enter the SSID and password, and pick the security type.
+- Download and place the code near the router or on a table card.
+
+### Privacy
+
+Wi-Fi codes are static: the password lives only inside the code you print, so keep the printed code where only your guests can see it.
+
+### FAQ
+
+**Does it work on iPhone and Android?** Yes. Both read Wi-Fi QR codes with the built-in camera app.
+**What if I change the Wi-Fi password?** Make a new code. A static Wi-Fi code contains the old password.
+
+## vCard QR code generator (contact card)
+
+A contact card QR code stores your details in the standard vCard format. When someone scans it, their phone offers to save your contact, so your name, number, email, company and website are added without typing.
+
+### Fields you can include
+
+- First and last name
+- Phone and email
+- Company and job title
+- Website and address
+
+### Where to print it
+
+Business cards, email signatures, stall banners, conference badges and shop windows.
+
+### Steps
+
+- Open the generator and choose Contact card.
+- Fill in your details.
+- Download the code. Keep the printed size at least 2.5 cm so phones read it quickly.
+
+### FAQ
+
+**Does it expire?** No. The details are inside the code, so it works forever. To change details later, make a new code.
+**Can I add my logo?** Yes, on Starter and higher plans you can add a logo in the centre.
+
+## Dynamic QR code generator with analytics
+
+A dynamic QR code points to a short QRForge link that redirects to your destination. The printed code never changes, but you can change where it goes at any time and see how many people scanned it.
+
+### What dynamic codes add
+
+- Edit the destination without reprinting
+- Pause or resume a code
+- Scan history by date, device, operating system and browser
+- Destination safety score and link health checks
+- On higher plans: smart rules by device or schedule, password protection and A/B destinations
+
+### Never-dead promise
+
+If you cancel a paid plan or reach a limit, your printed dynamic codes keep redirecting to the base destination. Premium rules pause, but the code does not die.
+
+### Important to know
+
+Dynamic codes depend on the QRForge redirect being online. For information that should work forever with no dependency, such as Wi-Fi or a contact card, use a static QR code.
+
+### Plans
+
+The free plan includes 2 dynamic QR codes. See pricing.
+
+### FAQ
+
+**What is the difference between static and dynamic QR codes?** A static code holds the data itself and never changes. A dynamic code holds a short link, so you can edit the destination and track scans.
+**Can I track how many people scanned my QR code?** Yes, dynamic codes record scans with date, device, operating system and browser. Visitor IP addresses are not stored.
+
+## Event registration with QR code passes
+
+QRForge Events lets you create an event, collect bookings, give every attendee a unique QR pass, and check people in at the door with a phone camera. The organizer dashboard shows live attendance and exports to Excel.
+
+### How it works
+
+- Create the event with name, venue, date, time, capacity and registration deadline. Choose free or paid (UPI, you approve each payment).
+- Share the booking link. Attendees enter their details and receive a QR pass by email, which they can also download as PNG or PDF, print, or send on WhatsApp.
+- At the gate, staff open the scanner link with a PIN and scan passes. The result is clear: valid, already used, cancelled or invalid.
+- Open the dashboard to see registrations and live attendance, search by name, email, booking ID or status, and export the attendee list or check-in records to Excel.
+
+### Features
+
+- Capacity limits that cannot be exceeded, even when many people book at once
+- One check-in per pass, even if two phones scan at the same instant
+- Attendee self-cancellation with confirmation, and organizer add or cancel for anyone
+- Co-organizers and a staff PIN for volunteers
+- Booking pages and passes in English, Hindi and Marathi
+
+### Good for
+
+Meetups, workshops, college fests, community and society events, classes, and small conferences.
+
+### FAQ
+
+**Can I sell tickets?** Yes. Paid events show your UPI QR with the amount. The attendee enters the transaction ID and you approve the payment, after which the pass is emailed.
+**Can attendees cancel?** Yes. Every pass has a cancel link that asks for confirmation. The seat is released and the cancellation appears in your report.
+**What happens if the internet is down at the gate?** Scanning needs the QRForge site. Keep an Excel export of the attendee list as a backup and use the booking ID to check people in manually.
+
+## QR codes for restaurants and cafes
+
+A menu QR code lets guests open your menu on their own phone, pay by UPI and leave a review, without handing out printed menus. Use a dynamic QR code so you can change the menu link without reprinting table cards.
+
+### Three codes most restaurants need
+
+- Menu: a link to your PDF or online menu
+- Pay: a UPI QR code for the table or counter
+- Review: your Google review link
+
+### Why dynamic for the menu
+
+Menus change with seasons and prices. With a dynamic QR code the printed card stays the same while you update the destination. You also see how many guests scan per day.
+
+### Print tips
+
+Use dark code on a light background, print at least 3 cm wide for table cards, and run the built-in scan test before printing.
+
+### FAQ
+
+**Can I change the menu later?** Yes, with a dynamic QR code you edit the destination and the printed code keeps working.
+**Can guests scan in low light?** Choose a high-contrast colour pair and a larger print size. The scan test warns you about low contrast.
+
+## QRForge pricing
+
+Static QR codes are free forever on every plan. Paid plans add more dynamic QR codes, longer analytics, your logo, more formats, bulk generation and larger events. Prices are in Indian rupees.
+
+### Plans
+
+- Free — ₹0. Unlimited static QR codes, 2 dynamic QR codes, 7-day scan history, 1 active event up to 50 guests.
+- Starter — ₹249/month (₹199/month billed yearly). 10 dynamic QR codes, 30-day analytics, your logo in the centre, PNG/JPG/SVG, 3 events up to 300 guests.
+- Pro — ₹699/month (₹549/month billed yearly). 50 dynamic QR codes, 1-year analytics and heatmap, smart routing, password-protected codes, bulk CSV (500 rows), 20 events up to 2,000 guests.
+- Business — ₹1,799/month (₹1,499/month billed yearly). 500 dynamic QR codes, 10-year analytics, bulk CSV (5,000 rows), 100 events up to 20,000 guests, priority support.
+
+### Payment
+
+You pay by UPI and submit the payment details; the plan is activated after the payment is verified, usually within a day.
+
+### Cancel any time
+
+If you cancel, your printed dynamic QR codes keep redirecting. See the never-dead promise.
+
+### FAQ
+
+**Is there a free plan?** Yes. It includes unlimited static QR codes, 2 dynamic QR codes and a 7-day scan history.
+**Are prices in rupees?** Yes, all prices are in Indian rupees (INR).
+
+## Plans (INR)
+
+- Free: ₹0. Unlimited static QR codes, 2 dynamic QR codes, 7-day scan history, 1 active event up to 50 guests.
+- Starter: ₹249/month (₹199/month billed yearly). 10 dynamic QR codes, 30-day analytics, your logo in the centre, PNG/JPG/SVG, 3 events up to 300 guests.
+- Pro: ₹699/month (₹549/month billed yearly). 50 dynamic QR codes, 1-year analytics and heatmap, smart routing, password-protected codes, bulk CSV (500 rows), 20 events up to 2,000 guests.
+- Business: ₹1,799/month (₹1,499/month billed yearly). 500 dynamic QR codes, 10-year analytics, bulk CSV (5,000 rows), 100 events up to 20,000 guests, priority support.

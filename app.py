@@ -3,7 +3,7 @@ import html
 
 import streamlit as st
 
-st.set_page_config(page_title="QRForge - QR Code Generator", page_icon=str(__import__("pathlib").Path(__file__).parent / "assets" / "favicon.png"), layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(page_title="QRForge - Free QR Code Generator India | UPI, WhatsApp, Dynamic QR", page_icon=str(__import__("pathlib").Path(__file__).parent / "assets" / "favicon.png"), layout="wide", initial_sidebar_state="expanded")
 
 from core import auth, db, i18n, landing, license, ui  # noqa: E402
 from core.i18n import _  # noqa: E402
